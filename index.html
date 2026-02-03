@@ -159,6 +159,28 @@
       background: #cbd5e1;
     }
 
+    .btn-icon {
+      background: transparent;
+      border: none;
+      padding: 8px;
+      border-radius: 6px;
+      cursor: pointer;
+      color: rgba(255, 255, 255, 0.8);
+      transition: all 0.15s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .btn-icon:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+    }
+
+    .btn-icon:active {
+      transform: scale(0.95);
+    }
+
     /* ===== MAIN ===== */
     main {
       max-width: 960px;
@@ -1137,6 +1159,63 @@
       font-size: 0.75rem;
     }
 
+    /* Settings Modal Weights */
+    .settings-weights {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .settings-weight-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 12px;
+      background: #f8fafc;
+      border-radius: 6px;
+    }
+
+    .settings-weight-item label {
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--color-text);
+      margin: 0;
+    }
+
+    .weight-input-group {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .weight-input-group input {
+      width: 60px;
+      padding: 6px 8px;
+      border: 1px solid var(--color-border);
+      border-radius: 4px;
+      text-align: center;
+      font-size: 0.85rem;
+    }
+
+    .weight-input-group span {
+      font-size: 0.85rem;
+      color: var(--color-text-secondary);
+    }
+
+    .weight-total {
+      margin-top: 12px;
+      padding: 10px 12px;
+      background: #e2e8f0;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      text-align: right;
+    }
+
+    .weight-total.invalid {
+      background: #fef2f2;
+      color: var(--color-danger);
+    }
+
     /* Responsive */
     @media (max-width: 700px) {
       .rubric-table {
@@ -1154,6 +1233,10 @@
       }
     }
   </style>
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+  <script src="firebase-config.js?v=2"></script>
 </head>
 
 <body>
@@ -1165,10 +1248,15 @@
       <h1>Risk Assessment</h1>
     </div>
     <div class="header-controls">
-      <div class="appetite-control">
-        <label for="appetite-select">Risk Appetite:</label>
-        <select id="appetite-select"></select>
-      </div>
+      <button class="btn-icon" id="settings-btn" title="Settings">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="3"></circle>
+          <path
+            d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z">
+          </path>
+        </svg>
+      </button>
       <button class="btn btn-primary" id="add-risk-btn">+ Add Risk</button>
     </div>
   </header>
@@ -1302,25 +1390,7 @@
             <span class="section-badge" id="badge-impact">Not Calculated</span>
           </div>
 
-          <div class="weights-panel">
-            <span class="weight-label">Weights:</span>
-            <div class="weight-item">
-              <label>Trust</label>
-              <input type="number" id="w-trust" value="25" min="0" max="100" onchange="updateWeights()">%
-            </div>
-            <div class="weight-item">
-              <label>Ops</label>
-              <input type="number" id="w-ops" value="25" min="0" max="100" onchange="updateWeights()">%
-            </div>
-            <div class="weight-item">
-              <label>Legal</label>
-              <input type="number" id="w-legal" value="25" min="0" max="100" onchange="updateWeights()">%
-            </div>
-            <div class="weight-item">
-              <label>Value</label>
-              <input type="number" id="w-val" value="25" min="0" max="100" onchange="updateWeights()">%
-            </div>
-          </div>
+          <!-- Note: Weights are configured in Settings -->
 
           <table class="rubric-table impact-rubric-table" id="impact-table">
             <thead>
@@ -1365,6 +1435,74 @@
       <div class="modal-footer">
         <button class="btn btn-secondary" id="modal-cancel">Cancel</button>
         <button class="btn btn-primary" id="modal-save">Save Risk</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SETTINGS MODAL -->
+  <div class="modal-backdrop" id="settings-backdrop">
+    <div class="modal" id="settings-modal" style="max-width: 500px;">
+      <div class="modal-header">
+        <h2>Settings</h2>
+        <button class="close-btn" id="settings-close" aria-label="Close settings">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="settings-appetite">Risk Appetite Threshold</label>
+          <p style="font-size:0.8rem; color:var(--color-text-secondary); margin-bottom:10px;">
+            Scores above this threshold are considered "Outside Appetite"
+          </p>
+          <select id="settings-appetite" style="width:100%;">
+            <!-- Will be populated by JS -->
+          </select>
+        </div>
+
+        <hr style="border:none; border-top:1px solid var(--color-border); margin:20px 0;">
+
+        <div class="form-group">
+          <label>Impact Category Weights</label>
+          <p style="font-size:0.8rem; color:var(--color-text-secondary); margin-bottom:12px;">
+            Set the relative importance of each impact category. Weights are used to calculate the weighted average
+            impact score.
+          </p>
+          <div class="settings-weights">
+            <div class="settings-weight-item">
+              <label>Trust / Reputational</label>
+              <div class="weight-input-group">
+                <input type="number" id="settings-w-trust" value="25" min="0" max="100">
+                <span>%</span>
+              </div>
+            </div>
+            <div class="settings-weight-item">
+              <label>Operational Scope</label>
+              <div class="weight-input-group">
+                <input type="number" id="settings-w-ops" value="25" min="0" max="100">
+                <span>%</span>
+              </div>
+            </div>
+            <div class="settings-weight-item">
+              <label>Legal / Compliance / Environmental</label>
+              <div class="weight-input-group">
+                <input type="number" id="settings-w-legal" value="25" min="0" max="100">
+                <span>%</span>
+              </div>
+            </div>
+            <div class="settings-weight-item">
+              <label>Enterprise Value</label>
+              <div class="weight-input-group">
+                <input type="number" id="settings-w-val" value="25" min="0" max="100">
+                <span>%</span>
+              </div>
+            </div>
+          </div>
+          <div class="weight-total" id="weight-total-display">
+            Total: <strong>100%</strong>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" id="settings-cancel">Cancel</button>
+        <button class="btn btn-primary" id="settings-save">Save Settings</button>
       </div>
     </div>
   </div>
@@ -1454,8 +1592,73 @@
     let impactScores = { trust: 0, ops: 0, legal: 0, val: 0 };
     let impactWeights = { trust: 25, ops: 25, legal: 25, val: 25 };
 
-    // ===== PERSISTENCE =====
+    // ===== FIREBASE SETUP =====
+    let db = null;
+    let firebaseInitialized = false;
+
+    function initFirebase() {
+      try {
+        if (window.firebaseConfig && window.firebaseConfig.apiKey !== 'YOUR_API_KEY') {
+          firebase.initializeApp(window.firebaseConfig);
+          db = firebase.database();
+          firebaseInitialized = true;
+          console.log('Firebase initialized successfully');
+          return true;
+        } else {
+          console.warn('Firebase config not set - using localStorage fallback');
+          return false;
+        }
+      } catch (e) {
+        console.warn('Failed to initialize Firebase:', e);
+        return false;
+      }
+    }
+
+    // ===== PERSISTENCE (Firebase with localStorage fallback) =====
+    function setupRealtimeListeners() {
+      if (!firebaseInitialized) return;
+
+      // Listen for risks changes
+      db.ref('risks').on('value', (snapshot) => {
+        const data = snapshot.val();
+        risks = data ? Object.values(data) : [];
+        renderGrid();
+        renderStats();
+        if (currentDetailCell) {
+          openDetail(currentDetailCell.likelihood, currentDetailCell.impact);
+        }
+      }, (error) => {
+        console.error('Firebase Read Error (Risks):', error.message);
+        if (error.message.includes('permission_denied')) {
+          console.warn('Check your Firebase Realtime Database Security Rules!');
+        }
+      });
+
+      // Listen for settings changes
+      db.ref('settings').on('value', (snapshot) => {
+        const data = snapshot.val();
+        if (data) {
+          if (data.appetiteThreshold) {
+            appetiteThreshold = data.appetiteThreshold;
+          }
+          if (data.weights) {
+            impactWeights = {
+              trust: data.weights.trust || 25,
+              ops: data.weights.ops || 25,
+              legal: data.weights.legal || 25,
+              val: data.weights.val || 25
+            };
+          }
+          renderGrid();
+          renderStats();
+        }
+      }, (error) => {
+        console.error('Firebase Read Error (Settings):', error.message);
+      });
+    }
+
     function loadRisks() {
+      // Initial load from localStorage as fallback
       try {
         const data = localStorage.getItem(STORAGE_KEY);
         if (data) {
@@ -1469,10 +1672,28 @@
     }
 
     function saveRisks() {
+      // Save to localStorage as backup
       try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(risks));
       } catch (e) {
-        console.warn('Failed to save risks:', e);
+        console.warn('Failed to save risks to localStorage:', e);
+      }
+
+      // Save to Firebase
+      if (firebaseInitialized) {
+        const risksObj = {};
+        risks.forEach(r => { risksObj[r.id] = r; });
+        db.ref('risks').set(risksObj).catch(e => {
+          console.warn('Failed to save risks to Firebase:', e);
+        });
+      }
+    }
+
+    function deleteRiskFromFirebase(riskId) {
+      if (firebaseInitialized) {
+        db.ref('risks/' + riskId).remove().catch(e => {
+          console.warn('Failed to delete risk from Firebase:', e);
+        });
       }
     }
 
@@ -1494,6 +1715,48 @@
         localStorage.setItem(APPETITE_KEY, String(appetiteThreshold));
       } catch (e) {
         console.warn('Failed to save appetite:', e);
+      }
+
+      if (firebaseInitialized) {
+        db.ref('settings/appetiteThreshold').set(appetiteThreshold).catch(e => {
+          console.warn('Failed to save appetite to Firebase:', e);
+        });
+      }
+    }
+
+    const WEIGHTS_KEY = 'risk_weights';
+
+    function loadWeights() {
+      try {
+        const data = localStorage.getItem(WEIGHTS_KEY);
+        if (data) {
+          const parsed = JSON.parse(data);
+          if (parsed && typeof parsed === 'object') {
+            return {
+              trust: parsed.trust || 25,
+              ops: parsed.ops || 25,
+              legal: parsed.legal || 25,
+              val: parsed.val || 25
+            };
+          }
+        }
+      } catch (e) {
+        console.warn('Failed to load weights:', e);
+      }
+      return { trust: 25, ops: 25, legal: 25, val: 25 };
+    }
+
+    function saveWeights() {
+      try {
+        localStorage.setItem(WEIGHTS_KEY, JSON.stringify(impactWeights));
+      } catch (e) {
+        console.warn('Failed to save weights:', e);
+      }
+
+      if (firebaseInitialized) {
+        db.ref('settings/weights').set(impactWeights).catch(e => {
+          console.warn('Failed to save weights to Firebase:', e);
+        });
       }
     }
 
@@ -1839,13 +2102,7 @@
 
       // Reset State
       impactScores = { trust: 0, ops: 0, legal: 0, val: 0 };
-      impactWeights = { trust: 25, ops: 25, legal: 25, val: 25 };
-
-      // Reset weight inputs
-      document.getElementById('w-trust').value = 25;
-      document.getElementById('w-ops').value = 25;
-      document.getElementById('w-legal').value = 25;
-      document.getElementById('w-val').value = 25;
+      // Note: impactWeights are now global settings, not per-risk
 
       // Reset UI - Render tables
       renderLikelihoodTable();
@@ -1887,13 +2144,7 @@
         impactScores = { trust: 0, ops: 0, legal: 0, val: 0 };
       }
 
-      if (risk.impactWeights) {
-        impactWeights = { ...risk.impactWeights };
-        document.getElementById('w-trust').value = impactWeights.trust;
-        document.getElementById('w-ops').value = impactWeights.ops;
-        document.getElementById('w-legal').value = impactWeights.legal;
-        document.getElementById('w-val').value = impactWeights.val;
-      }
+      // Note: impactWeights are global settings, not per-risk
 
       // Render tables and update UI to show selections
       renderLikelihoodTable();
@@ -2234,12 +2485,18 @@
 
     // ===== EVENT LISTENERS =====
     function init() {
+      // 1. Initial load from local storage (fast startup)
       risks = loadRisks();
       appetiteThreshold = loadAppetite();
+      impactWeights = loadWeights();
 
-      populateAppetiteSelect();
-      // populateFormDropdowns(); // Replaced by Rubrics
-      // renderRubrics(); // Replaced by Advanced UI
+      // 2. Initialize Firebase
+      const fbStarted = initFirebase();
+      if (fbStarted) {
+        setupRealtimeListeners();
+      }
+
+      // 3. Initial render
       renderGrid();
       renderStats();
 
@@ -2293,28 +2550,31 @@
         if (e.key === 'Enter') { e.preventDefault(); handleSaveRisk(); }
       });
 
-      // Appetite threshold change
-      document.getElementById('appetite-select').addEventListener('change', function () {
-        appetiteThreshold = parseInt(this.value, 10);
-        saveAppetite();
-        renderGrid();
-        renderStats();
-
-        // Refresh detail panel if open
-        if (currentDetailCell) {
-          openDetail(currentDetailCell.likelihood, currentDetailCell.impact);
-        }
-      });
-
       // Escape key
       document.addEventListener('keydown', function (e) {
         if (e.key === 'Escape') {
           if (document.getElementById('modal-backdrop').classList.contains('active')) {
             closeAddModal();
+          } else if (document.getElementById('settings-backdrop').classList.contains('active')) {
+            closeSettingsModal();
           } else if (document.getElementById('detail-panel').classList.contains('active')) {
             closeDetail();
           }
         }
+      });
+
+      // Settings button
+      document.getElementById('settings-btn').addEventListener('click', openSettingsModal);
+      document.getElementById('settings-close').addEventListener('click', closeSettingsModal);
+      document.getElementById('settings-cancel').addEventListener('click', closeSettingsModal);
+      document.getElementById('settings-save').addEventListener('click', saveSettings);
+      document.getElementById('settings-backdrop').addEventListener('click', function (e) {
+        if (e.target === this) closeSettingsModal();
+      });
+
+      // Settings weight inputs - update total display
+      ['settings-w-trust', 'settings-w-ops', 'settings-w-legal', 'settings-w-val'].forEach(id => {
+        document.getElementById(id).addEventListener('input', updateWeightTotalDisplay);
       });
 
       // Cross-tab sync
@@ -2329,14 +2589,99 @@
         }
         if (e.key === APPETITE_KEY) {
           appetiteThreshold = loadAppetite();
-          document.getElementById('appetite-select').value = appetiteThreshold;
           renderGrid();
           renderStats();
           if (currentDetailCell) {
             openDetail(currentDetailCell.likelihood, currentDetailCell.impact);
           }
         }
+        if (e.key === WEIGHTS_KEY) {
+          impactWeights = loadWeights();
+        }
       });
+    }
+
+    // ===== SETTINGS MODAL =====
+    function populateSettingsAppetite() {
+      const select = document.getElementById('settings-appetite');
+      select.innerHTML = '';
+      for (let i = 1; i <= 25; i++) {
+        const opt = document.createElement('option');
+        opt.value = i;
+        opt.text = `${i} - Scores > ${i} are outside appetite`;
+        if (i === appetiteThreshold) opt.selected = true;
+        select.appendChild(opt);
+      }
+    }
+
+    function openSettingsModal() {
+      populateSettingsAppetite();
+
+      // Load current weights into inputs
+      document.getElementById('settings-w-trust').value = impactWeights.trust;
+      document.getElementById('settings-w-ops').value = impactWeights.ops;
+      document.getElementById('settings-w-legal').value = impactWeights.legal;
+      document.getElementById('settings-w-val').value = impactWeights.val;
+
+      updateWeightTotalDisplay();
+      document.getElementById('settings-backdrop').classList.add('active');
+    }
+
+    function closeSettingsModal() {
+      document.getElementById('settings-backdrop').classList.remove('active');
+    }
+
+    function updateWeightTotalDisplay() {
+      const t = parseFloat(document.getElementById('settings-w-trust').value) || 0;
+      const o = parseFloat(document.getElementById('settings-w-ops').value) || 0;
+      const l = parseFloat(document.getElementById('settings-w-legal').value) || 0;
+      const v = parseFloat(document.getElementById('settings-w-val').value) || 0;
+      const total = t + o + l + v;
+
+      const display = document.getElementById('weight-total-display');
+      display.innerHTML = `Total: <strong>${total}%</strong>`;
+
+      if (total !== 100) {
+        display.classList.add('invalid');
+      } else {
+        display.classList.remove('invalid');
+      }
+    }
+
+    function saveSettings() {
+      // Get values
+      const newAppetite = parseInt(document.getElementById('settings-appetite').value, 10);
+      const newWeights = {
+        trust: parseFloat(document.getElementById('settings-w-trust').value) || 0,
+        ops: parseFloat(document.getElementById('settings-w-ops').value) || 0,
+        legal: parseFloat(document.getElementById('settings-w-legal').value) || 0,
+        val: parseFloat(document.getElementById('settings-w-val').value) || 0
+      };
+
+      // Validate weights sum to 100 (optional - just warn)
+      const total = newWeights.trust + newWeights.ops + newWeights.legal + newWeights.val;
+      if (total !== 100) {
+        if (!confirm(`Weights total ${total}% instead of 100%. Continue anyway?`)) {
+          return;
+        }
+      }
+
+      // Save appetite
+      appetiteThreshold = newAppetite;
+      saveAppetite();
+
+      // Save weights
+      impactWeights = newWeights;
+      saveWeights();
+
+      // Update UI
+      closeSettingsModal();
+      renderGrid();
+      renderStats();
+
+      if (currentDetailCell) {
+        openDetail(currentDetailCell.likelihood, currentDetailCell.impact);
+      }
     }
 
     document.addEventListener('DOMContentLoaded', init);

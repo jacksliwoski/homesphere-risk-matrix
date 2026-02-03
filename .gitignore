@@ -1,0 +1,9 @@
+# Local configuration files
+firebase-config.js
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Firebase
+.firebase/
