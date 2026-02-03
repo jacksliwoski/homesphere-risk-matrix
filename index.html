@@ -1,0 +1,2346 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Risk Assessment | Homesphere Robotics</title>
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --color-bg: #f1f5f9;
+      --color-surface: #ffffff;
+      --color-header: #0a0a0a;
+      --color-primary: #00b4d8;
+      --color-primary-hover: #0096b3;
+      --color-danger: #ef4444;
+      --color-danger-hover: #dc2626;
+      --color-text: #1e293b;
+      --color-text-secondary: #64748b;
+      --color-border: #e2e8f0;
+      --color-green: #22c55e;
+      --color-yellow: #eab308;
+      --color-orange: #f97316;
+      --color-red: #ef4444;
+      --color-appetite-line: #0a0a0a;
+      --color-accent: #00b4d8;
+      --radius: 8px;
+      --shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: var(--color-bg);
+      color: var(--color-text);
+      line-height: 1.5;
+      min-height: 100vh;
+    }
+
+    /* ===== HEADER ===== */
+    header {
+      background: var(--color-header);
+      color: #fff;
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: var(--shadow-lg);
+    }
+
+    .header-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .header-brand img {
+      height: 36px;
+      width: auto;
+    }
+
+    .header-brand .brand-divider {
+      width: 1px;
+      height: 28px;
+      background: rgba(255, 255, 255, 0.3);
+    }
+
+    .header-brand h1 {
+      font-size: 1rem;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      opacity: 0.9;
+    }
+
+    .header-controls {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .appetite-control {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.85rem;
+    }
+
+    .appetite-control label {
+      color: #cbd5e1;
+      white-space: nowrap;
+    }
+
+    .appetite-control select {
+      padding: 6px 10px;
+      border-radius: 6px;
+      border: 1px solid #475569;
+      background: #334155;
+      color: #fff;
+      font-size: 0.85rem;
+      cursor: pointer;
+    }
+
+    .btn {
+      padding: 8px 16px;
+      border: none;
+      border-radius: 6px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s, transform 0.1s;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn:active {
+      transform: scale(0.97);
+    }
+
+    .btn-primary {
+      background: var(--color-primary);
+      color: #fff;
+    }
+
+    .btn-primary:hover {
+      background: var(--color-primary-hover);
+    }
+
+    .btn-danger {
+      background: var(--color-danger);
+      color: #fff;
+      padding: 4px 10px;
+      font-size: 0.8rem;
+    }
+
+    .btn-danger:hover {
+      background: var(--color-danger-hover);
+    }
+
+    .btn-secondary {
+      background: #e2e8f0;
+      color: var(--color-text);
+    }
+
+    .btn-secondary:hover {
+      background: #cbd5e1;
+    }
+
+    /* ===== MAIN ===== */
+    main {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    /* ===== STATS ===== */
+    .stats-primary {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .stat-card-lg {
+      background: var(--color-surface);
+      border-radius: var(--radius);
+      padding: 24px;
+      box-shadow: var(--shadow);
+      text-align: center;
+    }
+
+    .stat-card-lg .stat-value {
+      font-size: 2.5rem;
+      font-weight: 800;
+      line-height: 1.1;
+    }
+
+    .stat-card-lg .stat-label {
+      font-size: 0.9rem;
+      color: var(--color-text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-top: 6px;
+    }
+
+    .stats-breakdown {
+      background: var(--color-surface);
+      border-radius: var(--radius);
+      padding: 16px;
+      box-shadow: var(--shadow);
+      margin-bottom: 24px;
+    }
+
+    .breakdown-header {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--color-text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .breakdown-cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .stat-card {
+      background: #f8fafc;
+      border-radius: 8px;
+      padding: 14px;
+      text-align: center;
+    }
+
+    .stat-card .stat-value {
+      font-size: 1.5rem;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+
+    .stat-card .stat-label {
+      font-size: 0.72rem;
+      color: var(--color-text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-top: 4px;
+    }
+
+    .stat-total .stat-value {
+      color: var(--color-primary);
+    }
+
+    .stat-critical .stat-value {
+      color: var(--color-red);
+    }
+
+    .stat-high .stat-value {
+      color: var(--color-orange);
+    }
+
+    .stat-medium .stat-value {
+      color: var(--color-yellow);
+    }
+
+    .stat-appetite .stat-value {
+      color: var(--color-danger);
+    }
+
+    /* ===== HEAT MAP ===== */
+    .heatmap-wrapper {
+      background: var(--color-surface);
+      border-radius: var(--radius);
+      padding: 24px;
+      box-shadow: var(--shadow);
+      overflow-x: auto;
+    }
+
+    .heatmap-title {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 16px;
+      text-align: center;
+      color: var(--color-text-secondary);
+    }
+
+    .heatmap-container {
+      display: grid;
+      grid-template-columns: auto repeat(5, 1fr);
+      grid-template-rows: repeat(5, 1fr) auto;
+      gap: 0;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .y-label {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding-right: 10px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--color-text-secondary);
+      min-width: 90px;
+    }
+
+    .x-label {
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding-top: 10px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--color-text-secondary);
+      text-align: center;
+    }
+
+    .corner-spacer {
+      /* empty bottom-left corner */
+      display: block;
+    }
+
+    .heatmap-cell {
+      aspect-ratio: 1;
+      min-width: 60px;
+      min-height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: filter 0.15s, transform 0.1s;
+      position: relative;
+      user-select: none;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .heatmap-cell:hover {
+      filter: brightness(1.1);
+      transform: scale(1.05);
+      z-index: 2;
+    }
+
+    .heatmap-cell:focus-visible {
+      outline: 3px solid var(--color-primary);
+      outline-offset: -3px;
+      z-index: 3;
+    }
+
+    .heatmap-cell .cell-count {
+      position: relative;
+      z-index: 1;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    }
+
+    .heatmap-cell .cell-count.empty {
+      opacity: 0.4;
+    }
+
+    /* Appetite boundary borders */
+    .heatmap-cell.appetite-border-top {
+      border-top: 3.5px dashed var(--color-appetite-line) !important;
+    }
+
+    .heatmap-cell.appetite-border-bottom {
+      border-bottom: 3.5px dashed var(--color-appetite-line) !important;
+    }
+
+    .heatmap-cell.appetite-border-left {
+      border-left: 3.5px dashed var(--color-appetite-line) !important;
+    }
+
+    .heatmap-cell.appetite-border-right {
+      border-right: 3.5px dashed var(--color-appetite-line) !important;
+    }
+
+    /* Outside appetite overlay */
+    .heatmap-cell.outside-appetite::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(45deg,
+          transparent,
+          transparent 4px,
+          rgba(0, 0, 0, 0.06) 4px,
+          rgba(0, 0, 0, 0.06) 6px);
+      pointer-events: none;
+    }
+
+    /* Axis titles */
+    .axis-title-y {
+      writing-mode: vertical-rl;
+      transform: rotate(180deg);
+      text-align: center;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--color-text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding-right: 8px;
+    }
+
+    .axis-title-x {
+      text-align: center;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--color-text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding-top: 12px;
+      grid-column: 2 / -1;
+    }
+
+    .heatmap-outer {
+      display: flex;
+      align-items: stretch;
+      justify-content: center;
+      gap: 4px;
+    }
+
+    .heatmap-inner {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* Legend */
+    .legend {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      margin-top: 16px;
+      flex-wrap: wrap;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.78rem;
+      color: var(--color-text-secondary);
+    }
+
+    .legend-swatch {
+      width: 16px;
+      height: 16px;
+      border-radius: 3px;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    .legend-appetite {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.78rem;
+      color: var(--color-text-secondary);
+    }
+
+    .legend-appetite-line {
+      width: 24px;
+      height: 0;
+      border-top: 3px dashed var(--color-appetite-line);
+    }
+
+    .empty-hint {
+      text-align: center;
+      color: var(--color-text-secondary);
+      font-size: 0.9rem;
+      margin-top: 20px;
+    }
+
+    /* ===== DETAIL PANEL (slide-in sidebar) ===== */
+    .detail-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.3);
+      z-index: 200;
+    }
+
+    .detail-backdrop.active {
+      display: block;
+    }
+
+    .detail-panel {
+      position: fixed;
+      top: 0;
+      right: -420px;
+      width: 400px;
+      max-width: 100vw;
+      height: 100vh;
+      background: var(--color-surface);
+      box-shadow: -4px 0 20px rgba(0, 0, 0, 0.15);
+      z-index: 210;
+      transition: right 0.25s ease;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .detail-panel.active {
+      right: 0;
+    }
+
+    .detail-header {
+      padding: 20px;
+      border-bottom: 1px solid var(--color-border);
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      flex-shrink: 0;
+    }
+
+    .detail-header-info h2 {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .detail-header-info .detail-meta {
+      font-size: 0.8rem;
+      color: var(--color-text-secondary);
+    }
+
+    .score-badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .appetite-badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      margin-left: 6px;
+    }
+
+    .appetite-badge.within {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .appetite-badge.outside {
+      background: #fef2f2;
+      color: #991b1b;
+    }
+
+    .close-btn {
+      background: none;
+      border: none;
+      font-size: 1.4rem;
+      cursor: pointer;
+      color: var(--color-text-secondary);
+      padding: 4px;
+      line-height: 1;
+      border-radius: 4px;
+      flex-shrink: 0;
+    }
+
+    .close-btn:hover {
+      background: var(--color-bg);
+      color: var(--color-text);
+    }
+
+    .detail-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px 20px;
+    }
+
+    .detail-empty {
+      text-align: center;
+      color: var(--color-text-secondary);
+      padding: 40px 20px;
+      font-size: 0.9rem;
+    }
+
+    .risk-card {
+      background: #fff;
+      padding: 14px 16px;
+      border-radius: 8px;
+      margin-bottom: 12px;
+      border: 1px solid var(--color-border);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .risk-card:hover {
+      border-color: var(--color-primary);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    }
+
+    .risk-card.expanded {
+      border-color: var(--color-primary);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .risk-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .risk-card-header h3 {
+      font-size: 0.95rem;
+      font-weight: 600;
+      margin: 0;
+      flex: 1;
+    }
+
+    .risk-card-header .expand-icon {
+      font-size: 1.2rem;
+      color: var(--color-text-secondary);
+      transition: transform 0.2s;
+    }
+
+    .risk-card.expanded .expand-icon {
+      transform: rotate(180deg);
+    }
+
+    .risk-card-preview {
+      font-size: 0.8rem;
+      color: var(--color-text-secondary);
+      margin-top: 6px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .risk-card.expanded .risk-card-preview {
+      display: none;
+    }
+
+    .risk-card-details {
+      display: none;
+      margin-top: 14px;
+      padding-top: 14px;
+      border-top: 1px solid var(--color-border);
+    }
+
+    .risk-card.expanded .risk-card-details {
+      display: block;
+    }
+
+    .risk-detail-row {
+      margin-bottom: 12px;
+    }
+
+    .risk-detail-row label {
+      display: block;
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: var(--color-text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 4px;
+    }
+
+    .risk-detail-row .value {
+      font-size: 0.85rem;
+      color: var(--color-text);
+    }
+
+    .impact-breakdown {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .impact-breakdown-item {
+      background: #f8fafc;
+      padding: 8px 10px;
+      border-radius: 6px;
+      font-size: 0.75rem;
+    }
+
+    .impact-breakdown-item .cat-name {
+      font-weight: 600;
+      color: var(--color-text-secondary);
+    }
+
+    .impact-breakdown-item .cat-score {
+      font-weight: 700;
+      margin-left: 4px;
+    }
+
+    .risk-card-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 14px;
+      justify-content: flex-end;
+    }
+
+    .risk-card-date {
+      font-size: 0.72rem;
+      color: #94a3b8;
+    }
+
+    /* ===== MODAL ===== */
+    .modal-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.4);
+      z-index: 300;
+    }
+
+    .modal-backdrop.active {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal {
+      background: var(--color-surface);
+      border-radius: 12px;
+      max-width: 800px;
+      max-height: 90vh;
+      max-height: calc(100vh - 64px);
+      overflow-y: auto;
+      box-shadow: var(--shadow-lg);
+      padding: 0;
+    }
+
+    .modal-header {
+      padding: 20px 24px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal-header h2 {
+      font-size: 1.1rem;
+      font-weight: 700;
+    }
+
+    .modal-body {
+      padding: 20px 24px;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.82rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: var(--color-text);
+    }
+
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid var(--color-border);
+      border-radius: 6px;
+      font-size: 0.9rem;
+      font-family: inherit;
+      color: var(--color-text);
+      background: #fff;
+      transition: border-color 0.15s;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+      outline: none;
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+    }
+
+    .form-group textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    .form-group .form-error {
+      color: var(--color-danger);
+      font-size: 0.78rem;
+      margin-top: 4px;
+      display: none;
+    }
+
+    .form-group.has-error input,
+    .form-group.has-error textarea {
+      border-color: var(--color-danger);
+    }
+
+    .form-group.has-error .form-error {
+      display: block;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .modal-footer {
+      padding: 0 24px 20px;
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 767px) {
+      header {
+        padding: 12px 16px;
+      }
+
+      header h1 {
+        font-size: 1.05rem;
+      }
+
+      main {
+        padding: 16px;
+      }
+
+      .y-label {
+        min-width: 60px;
+        font-size: 0.65rem;
+      }
+
+      .x-label {
+        font-size: 0.65rem;
+      }
+
+      .heatmap-cell {
+        min-width: 48px;
+        min-height: 48px;
+        font-size: 0.9rem;
+      }
+
+      .detail-panel {
+        width: 100vw;
+        right: -100vw;
+      }
+
+      .stats-row {
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      }
+    }
+
+    @media (max-width: 479px) {
+      .header-controls {
+        width: 100%;
+        justify-content: space-between;
+      }
+
+      .heatmap-cell {
+        min-width: 40px;
+        min-height: 40px;
+        font-size: 0.8rem;
+      }
+
+      .y-label {
+        min-width: 44px;
+        font-size: 0.58rem;
+      }
+
+      .x-label {
+        font-size: 0.58rem;
+      }
+
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+
+      .stat-card {
+        padding: 12px;
+      }
+
+      .stat-card .stat-value {
+        font-size: 1.4rem;
+      }
+    }
+
+    /* ===== RUBRIC TABLE STYLES ===== */
+
+    /* Section Headers */
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid var(--color-border);
+    }
+
+    .section-header h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--color-text);
+      margin: 0;
+    }
+
+    .section-header .section-badge {
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      background: #e2e8f0;
+      color: var(--color-text-secondary);
+    }
+
+    .section-header .section-badge.filled {
+      color: #fff;
+    }
+
+    /* Rubric Table */
+    .rubric-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.75rem;
+      border: 2px solid #333;
+      margin-bottom: 12px;
+    }
+
+    .rubric-table th {
+      background: #666;
+      color: #fff;
+      padding: 10px 8px;
+      text-align: center;
+      font-weight: 600;
+      border: 1px solid #333;
+      font-size: 0.8rem;
+    }
+
+    .rubric-table td {
+      padding: 10px 8px;
+      border: 1px solid #333;
+      vertical-align: top;
+      line-height: 1.4;
+    }
+
+    .rubric-table tbody tr {
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .rubric-table tbody tr:hover {
+      outline: 2px solid #0ea5e9;
+      outline-offset: -2px;
+    }
+
+    /* Impact table: cell-level hover instead of row */
+    .impact-rubric-table tbody tr:hover {
+      outline: none;
+    }
+
+    .impact-rubric-table tbody td:not(.rating-cell):hover {
+      outline: 2px solid #0ea5e9;
+      outline-offset: -2px;
+      cursor: pointer;
+    }
+
+    .rubric-table tbody tr.selected {
+      outline: 3px solid #1e293b;
+      outline-offset: -3px;
+      box-shadow: 0 0 0 4px rgba(30, 41, 59, 0.3);
+    }
+
+    .rubric-table .rating-cell {
+      text-align: center;
+      font-weight: 700;
+      color: #000;
+      width: 85px;
+      min-width: 85px;
+    }
+
+    .rubric-table .rating-cell .rating-label {
+      font-size: 0.85rem;
+      display: block;
+    }
+
+    .rubric-table .rating-cell .rating-score {
+      font-size: 1.1rem;
+      display: block;
+      margin-top: 2px;
+    }
+
+    /* Rating Colors */
+    .rating-critical {
+      background: #ef4444;
+    }
+
+    .rating-high {
+      background: #f97316;
+    }
+
+    .rating-moderate {
+      background: #eab308;
+    }
+
+    .rating-low {
+      background: #84cc16;
+    }
+
+    .rating-minimal {
+      background: #22c55e;
+    }
+
+    /* Probability column styling */
+    .rubric-table .prob-cell {
+      text-align: center;
+      width: 100px;
+      font-weight: 500;
+    }
+
+    .rubric-table .criteria-cell {
+      color: var(--color-text-secondary);
+    }
+
+    /* Impact Table - wider cells */
+    .impact-rubric-table td:not(.rating-cell) {
+      font-size: 0.7rem;
+    }
+
+    /* Score Summary Container */
+    .score-summary-container {
+      background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+      border-radius: 12px;
+      padding: 16px 20px;
+      margin-top: 16px;
+    }
+
+    .score-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+    }
+
+    .score-info {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .score-type {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #fff;
+    }
+
+    .score-calc {
+      font-size: 0.7rem;
+      color: #94a3b8;
+      font-family: 'SF Mono', Monaco, monospace;
+    }
+
+    .score-result {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .score-value {
+      font-size: 0.9rem;
+      color: #94a3b8;
+    }
+
+    .score-badge-lg {
+      padding: 6px 14px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      background: #64748b;
+      color: #fff;
+      min-width: 80px;
+      text-align: center;
+    }
+
+    .score-divider {
+      height: 1px;
+      background: rgba(255, 255, 255, 0.15);
+      margin: 8px 0;
+    }
+
+    .score-badge-xl {
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 1.1rem;
+      font-weight: 800;
+      background: #64748b;
+      color: #fff;
+      min-width: 100px;
+      text-align: center;
+    }
+
+    /* Weights Panel */
+    .weights-panel {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 14px;
+      padding: 10px 14px;
+      background: #f1f5f9;
+      border-radius: 8px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .weights-panel .weight-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--color-text-secondary);
+    }
+
+    .weights-panel .weight-item {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .weights-panel .weight-item label {
+      font-size: 0.7rem;
+      color: var(--color-text);
+      font-weight: 500;
+    }
+
+    .weights-panel .weight-item input {
+      width: 45px;
+      padding: 4px;
+      border: 1px solid var(--color-border);
+      border-radius: 4px;
+      text-align: center;
+      font-size: 0.75rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 700px) {
+      .rubric-table {
+        font-size: 0.65rem;
+      }
+
+      .rubric-table th,
+      .rubric-table td {
+        padding: 6px 4px;
+      }
+
+      .rubric-table .rating-cell {
+        width: 60px;
+        min-width: 60px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- HEADER -->
+  <header>
+    <div class="header-brand">
+      <img src="logo.png" alt="Homesphere Robotics">
+      <div class="brand-divider"></div>
+      <h1>Risk Assessment</h1>
+    </div>
+    <div class="header-controls">
+      <div class="appetite-control">
+        <label for="appetite-select">Risk Appetite:</label>
+        <select id="appetite-select"></select>
+      </div>
+      <button class="btn btn-primary" id="add-risk-btn">+ Add Risk</button>
+    </div>
+  </header>
+
+  <!-- MAIN CONTENT -->
+  <main>
+    <!-- PRIMARY STATS ROW -->
+    <div class="stats-primary">
+      <div class="stat-card-lg stat-total">
+        <div class="stat-value" id="stat-total">0</div>
+        <div class="stat-label">Total Risks</div>
+      </div>
+      <div class="stat-card-lg stat-appetite">
+        <div class="stat-value" id="stat-appetite">0</div>
+        <div class="stat-label">Outside Appetite</div>
+      </div>
+    </div>
+
+    <!-- RISK BREAKDOWN -->
+    <div class="stats-breakdown">
+      <div class="breakdown-header">Risk Breakdown by Severity</div>
+      <div class="breakdown-cards">
+        <div class="stat-card stat-critical">
+          <div class="stat-value" id="stat-critical">0</div>
+          <div class="stat-label">Critical</div>
+        </div>
+        <div class="stat-card stat-high">
+          <div class="stat-value" id="stat-high">0</div>
+          <div class="stat-label">High</div>
+        </div>
+        <div class="stat-card stat-medium">
+          <div class="stat-value" id="stat-medium">0</div>
+          <div class="stat-label">Medium / Low</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- HEAT MAP -->
+    <div class="heatmap-wrapper">
+      <div class="heatmap-outer">
+        <div class="axis-title-y">Impact</div>
+        <div class="heatmap-inner">
+          <div class="heatmap-container" id="heatmap-grid"></div>
+          <div class="axis-title-x">Likelihood</div>
+        </div>
+      </div>
+
+      <!-- Legend -->
+      <div class="legend">
+        <div class="legend-item">
+          <div class="legend-swatch" style="background:#22c55e;"></div>
+          Low (1-3)
+        </div>
+        <div class="legend-item">
+          <div class="legend-swatch" style="background:#eab308;"></div>
+          Medium (4-6)
+        </div>
+        <div class="legend-item">
+          <div class="legend-swatch" style="background:#f97316;"></div>
+          High (7-12)
+        </div>
+        <div class="legend-item">
+          <div class="legend-swatch" style="background:#ef4444;"></div>
+          Critical (13-25)
+        </div>
+        <div class="legend-appetite">
+          <div class="legend-appetite-line"></div>
+          Risk Appetite Boundary
+        </div>
+      </div>
+    </div>
+
+    <p class="empty-hint" id="empty-hint">Click "+ Add Risk" to get started.</p>
+  </main>
+
+  <!-- DETAIL PANEL -->
+  <div class="detail-backdrop" id="detail-backdrop"></div>
+  <aside class="detail-panel" id="detail-panel">
+    <div class="detail-header">
+      <div class="detail-header-info">
+        <h2 id="detail-title"></h2>
+        <div class="detail-meta" id="detail-meta"></div>
+      </div>
+      <button class="close-btn" id="detail-close" aria-label="Close panel">&times;</button>
+    </div>
+    <div class="detail-body" id="detail-body"></div>
+  </aside>
+
+  <!-- ADD RISK MODAL -->
+  <div class="modal-backdrop" id="modal-backdrop">
+    <div class="modal" id="risk-modal">
+      <div class="modal-header">
+        <h2>Add New Risk</h2>
+        <button class="close-btn" id="modal-close" aria-label="Close modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group" id="fg-title">
+          <label for="risk-title">Risk Title</label>
+          <input type="text" id="risk-title" placeholder="Enter risk title" maxlength="100">
+          <div class="form-error">Title is required.</div>
+        </div>
+        <div class="form-group" id="fg-desc">
+          <label for="risk-desc">Description</label>
+          <textarea id="risk-desc" placeholder="Describe the risk..." maxlength="500"></textarea>
+          <div class="form-error">Description is required.</div>
+        </div>
+        <!-- Likelihood Section -->
+        <div class="likelihood-section">
+          <div class="section-header">
+            <h3>Likelihood</h3>
+            <span class="section-badge" id="badge-likelihood">Not Selected</span>
+          </div>
+          <table class="rubric-table" id="likelihood-table">
+            <thead>
+              <tr>
+                <th>Rating</th>
+                <th>Probability of Occurring</th>
+                <th>Criteria</th>
+              </tr>
+            </thead>
+            <tbody id="likelihood-tbody"></tbody>
+          </table>
+          <input type="hidden" id="risk-likelihood">
+          <div class="form-error" id="err-likelihood" style="display:none;">Please select a likelihood score.</div>
+        </div>
+
+        <!-- Impact Section -->
+        <div class="impact-section" style="margin-top:20px;">
+          <div class="section-header">
+            <h3>Impact Calculator</h3>
+            <span class="section-badge" id="badge-impact">Not Calculated</span>
+          </div>
+
+          <div class="weights-panel">
+            <span class="weight-label">Weights:</span>
+            <div class="weight-item">
+              <label>Trust</label>
+              <input type="number" id="w-trust" value="25" min="0" max="100" onchange="updateWeights()">%
+            </div>
+            <div class="weight-item">
+              <label>Ops</label>
+              <input type="number" id="w-ops" value="25" min="0" max="100" onchange="updateWeights()">%
+            </div>
+            <div class="weight-item">
+              <label>Legal</label>
+              <input type="number" id="w-legal" value="25" min="0" max="100" onchange="updateWeights()">%
+            </div>
+            <div class="weight-item">
+              <label>Value</label>
+              <input type="number" id="w-val" value="25" min="0" max="100" onchange="updateWeights()">%
+            </div>
+          </div>
+
+          <table class="rubric-table impact-rubric-table" id="impact-table">
+            <thead>
+              <tr>
+                <th>Rating</th>
+                <th>Trust or Reputational</th>
+                <th>Operational Scope</th>
+                <th>Legal, Compliance, or Environmental</th>
+                <th>Enterprise Value</th>
+              </tr>
+            </thead>
+            <tbody id="impact-tbody"></tbody>
+          </table>
+
+          <div class="score-summary-container">
+            <div class="score-row impact-row">
+              <div class="score-info">
+                <span class="score-type">Impact Score</span>
+                <span class="score-calc" id="calc-formula">Select all categories</span>
+              </div>
+              <div class="score-result">
+                <span class="score-value" id="raw-score">—</span>
+                <span class="score-badge-lg" id="final-score">?</span>
+              </div>
+            </div>
+            <div class="score-divider"></div>
+            <div class="score-row risk-row">
+              <div class="score-info">
+                <span class="score-type">Total Risk Score</span>
+                <span class="score-calc" id="risk-formula">Likelihood × Impact</span>
+              </div>
+              <div class="score-result">
+                <span class="score-badge-xl" id="total-risk-score">?</span>
+              </div>
+            </div>
+          </div>
+          <input type="hidden" id="risk-impact">
+          <div class="form-error" id="err-impact" style="display:none;">Please select an impact level for each category.
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" id="modal-cancel">Cancel</button>
+        <button class="btn btn-primary" id="modal-save">Save Risk</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ===== CONSTANTS =====
+    const LIKELIHOOD_LABELS = [
+      'Remote',
+      'Not Likely',
+      'Likely',
+      'Highly Likely',
+      'Expected'
+    ];
+
+    const IMPACT_LABELS = [
+      'Minimal',
+      'Low',
+      'Moderate',
+      'High',
+      'Critical'
+    ];
+
+    const LIKELIHOOD_RUBRIC = [
+      { score: 5, rating: 'Expected', prob: '90-100%', criteria: 'With certainty, the event is expected to occur.' },
+      { score: 4, rating: 'Highly Likely', prob: '60-90%', criteria: 'There is a high chance of this event occurring.' },
+      { score: 3, rating: 'Likely', prob: '35-60%', criteria: 'The risk event or circumstance is likely to occur.' },
+      { score: 2, rating: 'Not Likely', prob: '5-35%', criteria: 'The risk event or circumstance occurring is possible but not likely.' },
+      { score: 1, rating: 'Remote', prob: '<5%', criteria: 'There is a rare chance of the risk event or circumstance occurring.' }
+    ];
+
+    const IMPACT_RUBRIC = [
+      {
+        score: 5, rating: 'Critical',
+        trust: 'Permanent loss of stakeholder trust. Failure to meet SLA for 15% of users, subscribers, and members.',
+        ops: 'Impacts the business operations of the enterprise globally.',
+        legal: 'Global restrictions on conducting business in certain product lines, markets, or geographies.',
+        val: 'Financial Impact > $3B (10% of Company Value)'
+      },
+      {
+        score: 4, rating: 'High',
+        trust: 'Great loss of stakeholder trust. Failure to meet SLA for 10% of users, subscribers, and members.',
+        ops: 'Significantly impacts business operations for multiple business areas.',
+        legal: 'Prohibited from conducting business in certain key product lines, markets, or geographies.',
+        val: 'Financial Impact > $600M (2% of the Company Value)'
+      },
+      {
+        score: 3, rating: 'Moderate',
+        trust: 'Moderate loss of stakeholder trust. Failure to meet SLA for 5% of users, subscribers, and members.',
+        ops: 'Impacts the business operations for a few business areas.',
+        legal: 'Moderate limitations on conducting business in some product lines, markets, or geographies.',
+        val: 'Financial Impact > $150M'
+      },
+      {
+        score: 2, rating: 'Low',
+        trust: 'Small loss of stakeholder trust. Failure to meet SLA for 2% of users, subscribers, and members.',
+        ops: 'Limited impact on business operations for a few business areas.',
+        legal: 'Some limitations on conducting business within a few product lines, markets, and a region.',
+        val: 'Financial Impact > $30M'
+      },
+      {
+        score: 1, rating: 'Minimal',
+        trust: 'Minimal loss of stakeholder trust. Failure to meet SLA for less than 2% of users, subscribers, and members.',
+        ops: 'Minimal impact on business operations within a single business area.',
+        legal: 'Minimal limitations on conducting business within a product line, market, or region.',
+        val: 'Financial Impact < $5M'
+      }
+    ];
+
+    const STORAGE_KEY = 'riskHeatMapData';
+    const APPETITE_KEY = 'riskAppetiteThreshold';
+    const DEFAULT_APPETITE = 12;
+
+    function getColorForScore(score) {
+      if (score >= 13) return { bg: '#ef4444', text: '#ffffff', level: 'Critical' };
+      if (score >= 7) return { bg: '#f97316', text: '#ffffff', level: 'High' };
+      if (score >= 4) return { bg: '#eab308', text: '#1e293b', level: 'Medium' };
+      return { bg: '#22c55e', text: '#ffffff', level: 'Low' };
+    }
+
+    // ===== STATE =====
+    let risks = [];
+    let appetiteThreshold = DEFAULT_APPETITE;
+    let currentDetailCell = null;
+    let editingRiskId = null; // null = adding new, string = editing existing
+
+    // Impact Calculator State
+    let impactScores = { trust: 0, ops: 0, legal: 0, val: 0 };
+    let impactWeights = { trust: 25, ops: 25, legal: 25, val: 25 };
+
+    // ===== PERSISTENCE =====
+    function loadRisks() {
+      try {
+        const data = localStorage.getItem(STORAGE_KEY);
+        if (data) {
+          const parsed = JSON.parse(data);
+          if (Array.isArray(parsed)) return parsed;
+        }
+      } catch (e) {
+        console.warn('Failed to load risks from localStorage:', e);
+      }
+      return [];
+    }
+
+    function saveRisks() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(risks));
+      } catch (e) {
+        console.warn('Failed to save risks:', e);
+      }
+    }
+
+    function loadAppetite() {
+      try {
+        const val = localStorage.getItem(APPETITE_KEY);
+        if (val !== null) {
+          const num = parseInt(val, 10);
+          if (num >= 1 && num <= 25) return num;
+        }
+      } catch (e) {
+        console.warn('Failed to load appetite:', e);
+      }
+      return DEFAULT_APPETITE;
+    }
+
+    function saveAppetite() {
+      try {
+        localStorage.setItem(APPETITE_KEY, String(appetiteThreshold));
+      } catch (e) {
+        console.warn('Failed to save appetite:', e);
+      }
+    }
+
+    function generateId() {
+      return 'r_' + Date.now() + '_' + Math.random().toString(36).substring(2, 8);
+    }
+
+    // ===== GRID RENDERING =====
+    function getRisksForCell(likelihood, impact) {
+      return risks.filter(r => r.likelihood === likelihood && r.impact === impact);
+    }
+
+    function renderGrid() {
+      const grid = document.getElementById('heatmap-grid');
+      grid.innerHTML = '';
+
+      // Build a score map for appetite boundary detection
+      const scoreMap = {};
+      for (let imp = 1; imp <= 5; imp++) {
+        for (let lik = 1; lik <= 5; lik++) {
+          scoreMap[`${lik},${imp}`] = lik * imp;
+        }
+      }
+
+      // Rows: impact 5 (top) to impact 1 (bottom)
+      for (let imp = 5; imp >= 1; imp--) {
+        // Y-axis label
+        const yLabel = document.createElement('div');
+        yLabel.className = 'y-label';
+        yLabel.textContent = IMPACT_LABELS[imp - 1];
+        grid.appendChild(yLabel);
+
+        // Cells for this row
+        for (let lik = 1; lik <= 5; lik++) {
+          const score = lik * imp;
+          const color = getColorForScore(score);
+          const cellRisks = getRisksForCell(lik, imp);
+          const count = cellRisks.length;
+          const isOutside = score > appetiteThreshold;
+
+          const cell = document.createElement('div');
+          cell.className = 'heatmap-cell';
+          cell.setAttribute('role', 'button');
+          cell.setAttribute('tabindex', '0');
+          cell.setAttribute('data-likelihood', lik);
+          cell.setAttribute('data-impact', imp);
+          cell.setAttribute('aria-label',
+            `Likelihood: ${LIKELIHOOD_LABELS[lik - 1]}, Impact: ${IMPACT_LABELS[imp - 1]}, ` +
+            `Score: ${score}, ${count} risk${count !== 1 ? 's' : ''}, ${color.level} risk`
+          );
+          cell.style.backgroundColor = color.bg;
+          cell.style.color = color.text;
+
+          if (isOutside) {
+            cell.classList.add('outside-appetite');
+          }
+
+          // Appetite boundary borders
+          // Check neighbor above (imp + 1): if current is outside and above is within (or no neighbor)
+          // We draw the border on the edge between within and outside cells
+          if (imp < 5) {
+            const neighborAboveScore = scoreMap[`${lik},${imp + 1}`];
+            const neighborAboveOutside = neighborAboveScore > appetiteThreshold;
+            if (isOutside !== neighborAboveOutside) {
+              if (isOutside) {
+                cell.classList.add('appetite-border-top');
+              } else {
+                // This cell is within, the one above is outside — no top border needed here,
+                // the cell above handles its bottom border
+              }
+            }
+          } else if (isOutside) {
+            // Top row and outside: add top border
+            cell.classList.add('appetite-border-top');
+          }
+
+          if (imp > 1) {
+            const neighborBelowScore = scoreMap[`${lik},${imp - 1}`];
+            const neighborBelowOutside = neighborBelowScore > appetiteThreshold;
+            if (isOutside !== neighborBelowOutside) {
+              if (isOutside) {
+                cell.classList.add('appetite-border-bottom');
+              }
+            }
+          } else if (isOutside) {
+            cell.classList.add('appetite-border-bottom');
+          }
+
+          if (lik > 1) {
+            const neighborLeftScore = scoreMap[`${lik - 1},${imp}`];
+            const neighborLeftOutside = neighborLeftScore > appetiteThreshold;
+            if (isOutside !== neighborLeftOutside) {
+              if (isOutside) {
+                cell.classList.add('appetite-border-left');
+              }
+            }
+          } else if (isOutside) {
+            cell.classList.add('appetite-border-left');
+          }
+
+          if (lik < 5) {
+            const neighborRightScore = scoreMap[`${lik + 1},${imp}`];
+            const neighborRightOutside = neighborRightScore > appetiteThreshold;
+            if (isOutside !== neighborRightOutside) {
+              if (isOutside) {
+                cell.classList.add('appetite-border-right');
+              }
+            }
+          } else if (isOutside) {
+            cell.classList.add('appetite-border-right');
+          }
+
+          const countSpan = document.createElement('span');
+          countSpan.className = 'cell-count' + (count === 0 ? ' empty' : '');
+          countSpan.textContent = count;
+          cell.appendChild(countSpan);
+
+          grid.appendChild(cell);
+        }
+      }
+
+      // Bottom row: corner spacer + X-axis labels
+      const spacer = document.createElement('div');
+      spacer.className = 'corner-spacer';
+      grid.appendChild(spacer);
+
+      for (let lik = 1; lik <= 5; lik++) {
+        const xLabel = document.createElement('div');
+        xLabel.className = 'x-label';
+        xLabel.textContent = LIKELIHOOD_LABELS[lik - 1];
+        grid.appendChild(xLabel);
+      }
+
+      // Empty hint
+      const hint = document.getElementById('empty-hint');
+      hint.style.display = risks.length === 0 ? 'block' : 'none';
+    }
+
+    function renderStats() {
+      let total = risks.length;
+      let critical = 0;
+      let high = 0;
+      let mediumLow = 0;
+      let outsideAppetite = 0;
+
+      risks.forEach(r => {
+        const score = r.likelihood * r.impact;
+        if (score >= 13) critical++;
+        else if (score >= 7) high++;
+        else mediumLow++;
+
+        if (score > appetiteThreshold) outsideAppetite++;
+      });
+
+      document.getElementById('stat-total').textContent = total;
+      document.getElementById('stat-critical').textContent = critical;
+      document.getElementById('stat-high').textContent = high;
+      document.getElementById('stat-medium').textContent = mediumLow;
+      document.getElementById('stat-appetite').textContent = outsideAppetite;
+    }
+
+    // ===== DETAIL PANEL =====
+    function openDetail(likelihood, impact) {
+      currentDetailCell = { likelihood, impact };
+      const panel = document.getElementById('detail-panel');
+      const backdrop = document.getElementById('detail-backdrop');
+      const titleEl = document.getElementById('detail-title');
+      const metaEl = document.getElementById('detail-meta');
+      const bodyEl = document.getElementById('detail-body');
+
+      const score = likelihood * impact;
+      const color = getColorForScore(score);
+      const isOutside = score > appetiteThreshold;
+
+      titleEl.textContent = `${LIKELIHOOD_LABELS[likelihood - 1]} / ${IMPACT_LABELS[impact - 1]}`;
+
+      // Build meta HTML safely
+      metaEl.textContent = '';
+      const scoreText = document.createTextNode('Score: ' + score + ' ');
+      metaEl.appendChild(scoreText);
+
+      const badge = document.createElement('span');
+      badge.className = 'score-badge';
+      badge.style.backgroundColor = color.bg;
+      badge.textContent = color.level;
+      metaEl.appendChild(badge);
+
+      const appetiteBadge = document.createElement('span');
+      appetiteBadge.className = 'appetite-badge ' + (isOutside ? 'outside' : 'within');
+      appetiteBadge.textContent = isOutside ? 'Outside Appetite' : 'Within Appetite';
+      metaEl.appendChild(appetiteBadge);
+
+      // Render risks as expandable cards
+      const cellRisks = getRisksForCell(likelihood, impact);
+      bodyEl.textContent = '';
+
+      if (cellRisks.length === 0) {
+        const empty = document.createElement('div');
+        empty.className = 'detail-empty';
+        empty.textContent = 'No risks at this level.';
+        bodyEl.appendChild(empty);
+      } else {
+        cellRisks.forEach(risk => {
+          const card = document.createElement('div');
+          card.className = 'risk-card';
+          card.setAttribute('data-risk-id', risk.id);
+
+          // Header (always visible)
+          const header = document.createElement('div');
+          header.className = 'risk-card-header';
+
+          const h3 = document.createElement('h3');
+          h3.textContent = risk.title;
+          header.appendChild(h3);
+
+          const expandIcon = document.createElement('span');
+          expandIcon.className = 'expand-icon';
+          expandIcon.textContent = '▼';
+          header.appendChild(expandIcon);
+
+          card.appendChild(header);
+
+          // Preview (visible when collapsed)
+          const preview = document.createElement('div');
+          preview.className = 'risk-card-preview';
+          preview.textContent = risk.description;
+          card.appendChild(preview);
+
+          // Details (visible when expanded)
+          const details = document.createElement('div');
+          details.className = 'risk-card-details';
+
+          // Description
+          details.innerHTML = `
+            <div class="risk-detail-row">
+              <label>Description</label>
+              <div class="value">${escapeHtml(risk.description)}</div>
+            </div>
+            <div class="risk-detail-row">
+              <label>Likelihood</label>
+              <div class="value">${LIKELIHOOD_LABELS[risk.likelihood - 1]} (${risk.likelihood})</div>
+            </div>
+            <div class="risk-detail-row">
+              <label>Impact Score</label>
+              <div class="value">${IMPACT_LABELS[risk.impact - 1]} (${risk.impact})</div>
+            </div>
+          `;
+
+          // Impact breakdown if available
+          if (risk.impactDetails) {
+            const breakdownRow = document.createElement('div');
+            breakdownRow.className = 'risk-detail-row';
+            breakdownRow.innerHTML = `<label>Impact Breakdown</label>`;
+
+            const breakdown = document.createElement('div');
+            breakdown.className = 'impact-breakdown';
+
+            const catNames = { trust: 'Trust', ops: 'Operations', legal: 'Legal', val: 'Value' };
+            const weights = risk.impactWeights || { trust: 25, ops: 25, legal: 25, val: 25 };
+
+            ['trust', 'ops', 'legal', 'val'].forEach(cat => {
+              if (risk.impactDetails[cat]) {
+                const item = document.createElement('div');
+                item.className = 'impact-breakdown-item';
+                item.innerHTML = `
+                  <span class="cat-name">${catNames[cat]}:</span>
+                  <span class="cat-score">${risk.impactDetails[cat]}</span>
+                  <span style="color:#94a3b8; margin-left:4px;">(${weights[cat]}%)</span>
+                `;
+                breakdown.appendChild(item);
+              }
+            });
+
+            breakdownRow.appendChild(breakdown);
+            details.appendChild(breakdownRow);
+          }
+
+          // Date
+          const dateRow = document.createElement('div');
+          dateRow.className = 'risk-detail-row';
+          dateRow.innerHTML = `
+            <label>Created</label>
+            <div class="value">${new Date(risk.createdAt).toLocaleDateString()} at ${new Date(risk.createdAt).toLocaleTimeString()}</div>
+          `;
+          details.appendChild(dateRow);
+
+          // Actions
+          const actions = document.createElement('div');
+          actions.className = 'risk-card-actions';
+
+          const editBtn = document.createElement('button');
+          editBtn.className = 'btn btn-secondary';
+          editBtn.textContent = 'Edit';
+          editBtn.onclick = (e) => {
+            e.stopPropagation();
+            openEditModal(risk);
+          };
+          actions.appendChild(editBtn);
+
+          const delBtn = document.createElement('button');
+          delBtn.className = 'btn btn-danger';
+          delBtn.textContent = 'Delete';
+          delBtn.onclick = (e) => {
+            e.stopPropagation();
+            handleDeleteRisk(risk.id);
+          };
+          actions.appendChild(delBtn);
+
+          details.appendChild(actions);
+          card.appendChild(details);
+
+          // Toggle expand on click
+          card.onclick = () => {
+            card.classList.toggle('expanded');
+          };
+
+          bodyEl.appendChild(card);
+        });
+      }
+
+      panel.classList.add('active');
+      backdrop.classList.add('active');
+    }
+
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    function closeDetail() {
+      currentDetailCell = null;
+      document.getElementById('detail-panel').classList.remove('active');
+      document.getElementById('detail-backdrop').classList.remove('active');
+    }
+
+    // ===== ADD RISK MODAL =====
+    function openAddModal() {
+      document.getElementById('risk-title').value = '';
+      document.getElementById('risk-desc').value = '';
+      document.getElementById('risk-likelihood').value = '';
+      document.getElementById('risk-impact').value = '';
+
+      // Reset State
+      impactScores = { trust: 0, ops: 0, legal: 0, val: 0 };
+      impactWeights = { trust: 25, ops: 25, legal: 25, val: 25 };
+
+      // Reset weight inputs
+      document.getElementById('w-trust').value = 25;
+      document.getElementById('w-ops').value = 25;
+      document.getElementById('w-legal').value = 25;
+      document.getElementById('w-val').value = 25;
+
+      // Reset UI - Render tables
+      renderLikelihoodTable();
+      renderImpactTable();
+      updateImpactCalculation();
+
+      document.getElementById('badge-likelihood').textContent = 'Not Selected';
+      document.getElementById('badge-likelihood').classList.remove('filled');
+      document.getElementById('badge-likelihood').style.backgroundColor = '';
+      document.getElementById('badge-impact').textContent = 'Not Calculated';
+      document.getElementById('badge-impact').classList.remove('filled');
+      document.getElementById('badge-impact').style.backgroundColor = '';
+
+      // Clear errors
+      ['fg-title', 'fg-desc'].forEach(id => document.getElementById(id).classList.remove('has-error'));
+      document.getElementById('err-likelihood').style.display = 'none';
+      document.getElementById('err-impact').style.display = 'none';
+
+      // Set add mode
+      editingRiskId = null;
+      document.querySelector('.modal-header h2').textContent = 'Add New Risk';
+      document.getElementById('modal-save').textContent = 'Save Risk';
+
+      document.getElementById('modal-backdrop').classList.add('active');
+      document.getElementById('risk-title').focus();
+    }
+
+    function openEditModal(risk) {
+      // Pre-fill form with existing risk data
+      document.getElementById('risk-title').value = risk.title;
+      document.getElementById('risk-desc').value = risk.description;
+      document.getElementById('risk-likelihood').value = risk.likelihood;
+      document.getElementById('risk-impact').value = risk.impact;
+
+      // Restore impact details if available
+      if (risk.impactDetails) {
+        impactScores = { ...risk.impactDetails };
+      } else {
+        impactScores = { trust: 0, ops: 0, legal: 0, val: 0 };
+      }
+
+      if (risk.impactWeights) {
+        impactWeights = { ...risk.impactWeights };
+        document.getElementById('w-trust').value = impactWeights.trust;
+        document.getElementById('w-ops').value = impactWeights.ops;
+        document.getElementById('w-legal').value = impactWeights.legal;
+        document.getElementById('w-val').value = impactWeights.val;
+      }
+
+      // Render tables and update UI to show selections
+      renderLikelihoodTable();
+      renderImpactTable();
+      updateImpactCalculation();
+
+      // Select the correct likelihood row
+      const likRow = document.querySelector(`#likelihood-tbody tr[data-score="${risk.likelihood}"]`);
+      if (likRow) {
+        likRow.classList.add('selected');
+        const badge = document.getElementById('badge-likelihood');
+        badge.textContent = `${LIKELIHOOD_LABELS[risk.likelihood - 1]} (${risk.likelihood})`;
+        badge.classList.add('filled');
+        badge.style.backgroundColor = LEVEL_COLORS[risk.likelihood - 1];
+      }
+
+      // Clear errors
+      ['fg-title', 'fg-desc'].forEach(id => document.getElementById(id).classList.remove('has-error'));
+      document.getElementById('err-likelihood').style.display = 'none';
+      document.getElementById('err-impact').style.display = 'none';
+
+      // Set edit mode
+      editingRiskId = risk.id;
+      document.querySelector('.modal-header h2').textContent = 'Edit Risk';
+      document.getElementById('modal-save').textContent = 'Update Risk';
+
+      // Close detail panel and open modal
+      closeDetail();
+      document.getElementById('modal-backdrop').classList.add('active');
+      document.getElementById('risk-title').focus();
+    }
+
+    function closeAddModal() {
+      document.getElementById('modal-backdrop').classList.remove('active');
+      editingRiskId = null;
+    }
+
+    function handleSaveRisk() {
+      const titleInput = document.getElementById('risk-title');
+      const descInput = document.getElementById('risk-desc');
+      const likInput = document.getElementById('risk-likelihood');
+      const impInput = document.getElementById('risk-impact');
+
+      const title = titleInput.value.trim();
+      const desc = descInput.value.trim();
+      const likelihood = parseInt(likInput.value, 10);
+      const impact = parseInt(impInput.value, 10);
+
+      let valid = true;
+
+      if (!title) { document.getElementById('fg-title').classList.add('has-error'); valid = false; }
+      else { document.getElementById('fg-title').classList.remove('has-error'); }
+
+      if (!desc) { document.getElementById('fg-desc').classList.add('has-error'); valid = false; }
+      else { document.getElementById('fg-desc').classList.remove('has-error'); }
+
+      if (!likelihood) {
+        document.getElementById('err-likelihood').style.display = 'block';
+        valid = false;
+      } else {
+        document.getElementById('err-likelihood').style.display = 'none';
+      }
+
+      if (!impact) {
+        document.getElementById('err-impact').style.display = 'block';
+        valid = false;
+      } else {
+        document.getElementById('err-impact').style.display = 'none';
+      }
+
+      if (!valid) return;
+
+      if (editingRiskId) {
+        // Edit mode - update existing risk
+        const riskIndex = risks.findIndex(r => r.id === editingRiskId);
+        if (riskIndex !== -1) {
+          risks[riskIndex] = {
+            ...risks[riskIndex],
+            title: title,
+            description: desc,
+            likelihood: likelihood,
+            impact: impact,
+            impactDetails: { ...impactScores },
+            impactWeights: { ...impactWeights },
+            updatedAt: new Date().toISOString()
+          };
+        }
+      } else {
+        // Add mode - create new risk
+        const newRisk = {
+          id: generateId(),
+          title: title,
+          description: desc,
+          likelihood: likelihood,
+          impact: impact,
+          impactDetails: { ...impactScores },
+          impactWeights: { ...impactWeights },
+          createdAt: new Date().toISOString()
+        };
+        risks.push(newRisk);
+      }
+
+      saveRisks();
+      closeAddModal();
+      renderGrid();
+      renderStats();
+
+      // Refresh detail panel if open for the same cell
+      if (currentDetailCell &&
+        currentDetailCell.likelihood === likelihood &&
+        currentDetailCell.impact === impact) {
+        openDetail(likelihood, impact);
+      }
+    }
+
+    // ===== DELETE RISK =====
+    function handleDeleteRisk(riskId) {
+      if (!confirm('Are you sure you want to delete this risk?')) return;
+
+      risks = risks.filter(r => r.id !== riskId);
+      saveRisks();
+      renderGrid();
+      renderStats();
+
+      // Refresh detail panel if open
+      if (currentDetailCell) {
+        openDetail(currentDetailCell.likelihood, currentDetailCell.impact);
+      }
+    }
+
+    // ===== APPETITE CONTROL =====
+    function populateAppetiteSelect() {
+      const sel = document.getElementById('appetite-select');
+      for (let s = 1; s <= 25; s++) {
+        const opt = document.createElement('option');
+        opt.value = s;
+        opt.textContent = s;
+        sel.appendChild(opt);
+      }
+      sel.value = appetiteThreshold;
+    }
+
+    // ===== RUBRIC TABLE RENDERING =====
+    const RATING_CLASSES = ['rating-minimal', 'rating-low', 'rating-moderate', 'rating-high', 'rating-critical'];
+    const LEVEL_LABELS = ['Minimal', 'Low', 'Moderate', 'High', 'Critical'];
+    const LEVEL_COLORS = ['#22c55e', '#84cc16', '#eab308', '#f97316', '#ef4444'];
+
+    function renderLikelihoodTable() {
+      const tbody = document.getElementById('likelihood-tbody');
+      tbody.innerHTML = '';
+
+      LIKELIHOOD_RUBRIC.forEach(item => {
+        const tr = document.createElement('tr');
+        tr.setAttribute('data-score', item.score);
+        tr.onclick = () => selectLikelihoodRow(item, tr);
+
+        tr.innerHTML = `
+          <td class="rating-cell ${RATING_CLASSES[item.score - 1]}">
+            <span class="rating-label">${item.rating}</span>
+            <span class="rating-score">${item.score}</span>
+          </td>
+          <td class="prob-cell">${item.prob}</td>
+          <td class="criteria-cell">${item.criteria}</td>
+        `;
+
+        tbody.appendChild(tr);
+      });
+    }
+
+    function selectLikelihoodRow(item, rowElement) {
+      document.getElementById('risk-likelihood').value = item.score;
+
+      // Update selection UI - reset all rows first
+      document.querySelectorAll('#likelihood-tbody tr').forEach(r => {
+        r.classList.remove('selected');
+        r.style.backgroundColor = '';
+        // Reset text colors on non-rating cells
+        r.querySelectorAll('td:not(.rating-cell)').forEach(td => {
+          td.style.color = '';
+        });
+      });
+
+      // Highlight selected row with rating color
+      rowElement.classList.add('selected');
+      rowElement.style.backgroundColor = LEVEL_COLORS[item.score - 1];
+      // Make text more readable on colored background
+      rowElement.querySelectorAll('td:not(.rating-cell)').forEach(td => {
+        td.style.color = item.score >= 3 ? '#000' : '#fff';
+      });
+
+      const badge = document.getElementById('badge-likelihood');
+      badge.textContent = `${item.rating} (${item.score})`;
+      badge.classList.add('filled');
+      badge.style.backgroundColor = LEVEL_COLORS[item.score - 1];
+
+      document.getElementById('err-likelihood').style.display = 'none';
+
+      // Update total risk score
+      const impactVal = parseInt(document.getElementById('risk-impact').value, 10) || 0;
+      updateTotalRiskScore(item.score, impactVal);
+    }
+
+    function renderImpactTable() {
+      const tbody = document.getElementById('impact-tbody');
+      tbody.innerHTML = '';
+
+      IMPACT_RUBRIC.forEach(item => {
+        const tr = document.createElement('tr');
+        tr.setAttribute('data-score', item.score);
+
+        // Rating cell (not clickable, just label)
+        const ratingTd = document.createElement('td');
+        ratingTd.className = `rating-cell ${RATING_CLASSES[item.score - 1]}`;
+        ratingTd.innerHTML = `
+          <span class="rating-label">${item.rating}</span>
+          <span class="rating-score">${item.score}</span>
+        `;
+        tr.appendChild(ratingTd);
+
+        // Category cells - each one is clickable
+        ['trust', 'ops', 'legal', 'val'].forEach(cat => {
+          const td = document.createElement('td');
+          td.className = impactScores[cat] === item.score ? 'selected-cell' : '';
+          td.style.cursor = 'pointer';
+          td.textContent = item[cat];
+
+          if (impactScores[cat] === item.score) {
+            td.style.backgroundColor = LEVEL_COLORS[item.score - 1];
+            td.style.color = item.score >= 3 ? '#000' : '#fff';
+            td.style.fontWeight = '600';
+          }
+
+          td.onclick = (e) => {
+            e.stopPropagation();
+            selectImpactCell(cat, item.score);
+          };
+
+          tr.appendChild(td);
+        });
+
+        tbody.appendChild(tr);
+      });
+    }
+
+    function selectImpactCell(cat, score) {
+      impactScores[cat] = score;
+      renderImpactTable();
+      updateImpactCalculation();
+    }
+
+    function updateWeights() {
+      const t = parseFloat(document.getElementById('w-trust').value) || 0;
+      const o = parseFloat(document.getElementById('w-ops').value) || 0;
+      const l = parseFloat(document.getElementById('w-legal').value) || 0;
+      const v = parseFloat(document.getElementById('w-val').value) || 0;
+
+      impactWeights = { trust: t, ops: o, legal: l, val: v };
+      updateImpactCalculation();
+    }
+
+    function updateImpactCalculation() {
+      const { trust, ops, legal, val } = impactScores;
+      const w = impactWeights;
+
+      const totalWeight = w.trust + w.ops + w.legal + w.val;
+      if (totalWeight === 0) return;
+
+      const weightedSum = (trust * w.trust) + (ops * w.ops) + (legal * w.legal) + (val * w.val);
+      const rawScore = weightedSum / totalWeight;
+      const roundedScore = Math.round(rawScore);
+
+      // Get likelihood value
+      const likelihoodVal = parseInt(document.getElementById('risk-likelihood').value, 10) || 0;
+
+      // Update UI
+      if (trust && ops && legal && val) {
+        document.getElementById('calc-formula').textContent =
+          `(${trust}×${w.trust} + ${ops}×${w.ops} + ${legal}×${w.legal} + ${val}×${w.val}) ÷ ${totalWeight} = ${rawScore.toFixed(2)}`;
+        document.getElementById('raw-score').textContent = `→ ${roundedScore}`;
+
+        const finalScoreEl = document.getElementById('final-score');
+        finalScoreEl.textContent = `${roundedScore} ${LEVEL_LABELS[roundedScore - 1]}`;
+        finalScoreEl.style.backgroundColor = LEVEL_COLORS[roundedScore - 1];
+
+        document.getElementById('risk-impact').value = roundedScore;
+
+        const badge = document.getElementById('badge-impact');
+        badge.textContent = `${LEVEL_LABELS[roundedScore - 1]} (${roundedScore})`;
+        badge.classList.add('filled');
+        badge.style.backgroundColor = LEVEL_COLORS[roundedScore - 1];
+        badge.style.color = '#fff';
+
+        document.getElementById('err-impact').style.display = 'none';
+
+        // Update total risk score
+        updateTotalRiskScore(likelihoodVal, roundedScore);
+      } else {
+        document.getElementById('calc-formula').textContent = 'Select all categories';
+        document.getElementById('raw-score').textContent = '';
+        document.getElementById('final-score').textContent = '?';
+        document.getElementById('final-score').style.backgroundColor = '#64748b';
+        document.getElementById('risk-impact').value = '';
+
+        // Reset total risk score
+        updateTotalRiskScore(likelihoodVal, 0);
+      }
+    }
+
+    function updateTotalRiskScore(likelihood, impact) {
+      const riskFormulaEl = document.getElementById('risk-formula');
+      const totalRiskEl = document.getElementById('total-risk-score');
+
+      if (likelihood && impact) {
+        const totalScore = likelihood * impact;
+        const color = getColorForScore(totalScore);
+
+        riskFormulaEl.textContent = `${likelihood} × ${impact} = ${totalScore}`;
+        totalRiskEl.textContent = `${totalScore} ${color.level}`;
+        totalRiskEl.style.backgroundColor = color.bg;
+        totalRiskEl.style.color = color.text;
+      } else if (likelihood) {
+        riskFormulaEl.textContent = `${likelihood} × ?`;
+        totalRiskEl.textContent = '?';
+        totalRiskEl.style.backgroundColor = '#64748b';
+        totalRiskEl.style.color = '#fff';
+      } else if (impact) {
+        riskFormulaEl.textContent = `? × ${impact}`;
+        totalRiskEl.textContent = '?';
+        totalRiskEl.style.backgroundColor = '#64748b';
+        totalRiskEl.style.color = '#fff';
+      } else {
+        riskFormulaEl.textContent = 'Likelihood × Impact';
+        totalRiskEl.textContent = '?';
+        totalRiskEl.style.backgroundColor = '#64748b';
+        totalRiskEl.style.color = '#fff';
+      }
+    }
+
+    // ===== EVENT LISTENERS =====
+    function init() {
+      risks = loadRisks();
+      appetiteThreshold = loadAppetite();
+
+      populateAppetiteSelect();
+      // populateFormDropdowns(); // Replaced by Rubrics
+      // renderRubrics(); // Replaced by Advanced UI
+      renderGrid();
+      renderStats();
+
+      // Grid cell clicks (event delegation)
+      document.getElementById('heatmap-grid').addEventListener('click', function (e) {
+        const cell = e.target.closest('.heatmap-cell');
+        if (!cell) return;
+        const lik = parseInt(cell.getAttribute('data-likelihood'), 10);
+        const imp = parseInt(cell.getAttribute('data-impact'), 10);
+        openDetail(lik, imp);
+      });
+
+      // Grid cell keyboard (Enter/Space)
+      document.getElementById('heatmap-grid').addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+          const cell = e.target.closest('.heatmap-cell');
+          if (!cell) return;
+          e.preventDefault();
+          const lik = parseInt(cell.getAttribute('data-likelihood'), 10);
+          const imp = parseInt(cell.getAttribute('data-impact'), 10);
+          openDetail(lik, imp);
+        }
+      });
+
+      // Detail panel close
+      document.getElementById('detail-close').addEventListener('click', closeDetail);
+      document.getElementById('detail-backdrop').addEventListener('click', closeDetail);
+
+      // Detail panel delete delegation
+      document.getElementById('detail-body').addEventListener('click', function (e) {
+        const btn = e.target.closest('.btn-danger[data-risk-id]');
+        if (!btn) return;
+        handleDeleteRisk(btn.getAttribute('data-risk-id'));
+      });
+
+      // Add risk button
+      document.getElementById('add-risk-btn').addEventListener('click', openAddModal);
+
+      // Modal close
+      document.getElementById('modal-close').addEventListener('click', closeAddModal);
+      document.getElementById('modal-cancel').addEventListener('click', closeAddModal);
+      document.getElementById('modal-backdrop').addEventListener('click', function (e) {
+        if (e.target === this) closeAddModal();
+      });
+
+      // Modal save
+      document.getElementById('modal-save').addEventListener('click', handleSaveRisk);
+
+      // Enter key in modal form
+      document.getElementById('risk-title').addEventListener('keydown', function (e) {
+        if (e.key === 'Enter') { e.preventDefault(); handleSaveRisk(); }
+      });
+
+      // Appetite threshold change
+      document.getElementById('appetite-select').addEventListener('change', function () {
+        appetiteThreshold = parseInt(this.value, 10);
+        saveAppetite();
+        renderGrid();
+        renderStats();
+
+        // Refresh detail panel if open
+        if (currentDetailCell) {
+          openDetail(currentDetailCell.likelihood, currentDetailCell.impact);
+        }
+      });
+
+      // Escape key
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') {
+          if (document.getElementById('modal-backdrop').classList.contains('active')) {
+            closeAddModal();
+          } else if (document.getElementById('detail-panel').classList.contains('active')) {
+            closeDetail();
+          }
+        }
+      });
+
+      // Cross-tab sync
+      window.addEventListener('storage', function (e) {
+        if (e.key === STORAGE_KEY) {
+          risks = loadRisks();
+          renderGrid();
+          renderStats();
+          if (currentDetailCell) {
+            openDetail(currentDetailCell.likelihood, currentDetailCell.impact);
+          }
+        }
+        if (e.key === APPETITE_KEY) {
+          appetiteThreshold = loadAppetite();
+          document.getElementById('appetite-select').value = appetiteThreshold;
+          renderGrid();
+          renderStats();
+          if (currentDetailCell) {
+            openDetail(currentDetailCell.likelihood, currentDetailCell.impact);
+          }
+        }
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
+
+</html>
