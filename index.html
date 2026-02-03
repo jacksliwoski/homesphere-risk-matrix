@@ -1216,6 +1216,108 @@
       color: var(--color-danger);
     }
 
+    /* Rubric Editor in Settings */
+    .rubric-editor-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 4px;
+    }
+
+    .rubric-editor-header label {
+      font-size: 0.95rem;
+      font-weight: 600;
+      margin: 0;
+    }
+
+    .btn-sm {
+      padding: 4px 10px;
+      font-size: 0.72rem;
+    }
+
+    .rubric-editor {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .rubric-editor-item {
+      border: 1px solid var(--color-border);
+      border-radius: 8px;
+      padding: 12px;
+      background: #f8fafc;
+    }
+
+    .rubric-editor-item .editor-rating {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #000;
+      margin-bottom: 10px;
+    }
+
+    .editor-fields {
+      display: grid;
+      gap: 8px;
+    }
+
+    .editor-fields.likelihood-fields {
+      grid-template-columns: 120px 1fr;
+    }
+
+    .editor-fields.impact-fields {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .editor-field {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .editor-field-label {
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: var(--color-text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    .editor-field input,
+    .editor-field textarea {
+      width: 100%;
+      padding: 6px 8px;
+      border: 1px solid var(--color-border);
+      border-radius: 4px;
+      font-size: 0.8rem;
+      font-family: inherit;
+      color: var(--color-text);
+      background: #fff;
+      transition: border-color 0.15s;
+    }
+
+    .editor-field input:focus,
+    .editor-field textarea:focus {
+      outline: none;
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 2px rgba(59,130,246,0.12);
+    }
+
+    .editor-field textarea {
+      min-height: 48px;
+      resize: vertical;
+      line-height: 1.4;
+    }
+
+    @media (max-width: 479px) {
+      .editor-fields.likelihood-fields,
+      .editor-fields.impact-fields {
+        grid-template-columns: 1fr;
+      }
+    }
+
     /* Responsive */
     @media (max-width: 700px) {
       .rubric-table {
@@ -1441,7 +1543,7 @@
 
   <!-- SETTINGS MODAL -->
   <div class="modal-backdrop" id="settings-backdrop">
-    <div class="modal" id="settings-modal" style="max-width: 500px;">
+    <div class="modal" id="settings-modal" style="max-width: 720px;">
       <div class="modal-header">
         <h2>Settings</h2>
         <button class="close-btn" id="settings-close" aria-label="Close settings">&times;</button>
@@ -1499,6 +1601,38 @@
             Total: <strong>100%</strong>
           </div>
         </div>
+
+        <hr style="border:none; border-top:1px solid var(--color-border); margin:20px 0;">
+
+        <!-- Likelihood Scale Editor -->
+        <div class="form-group">
+          <div class="rubric-editor-header">
+            <label>Likelihood Scale</label>
+            <button type="button" class="btn btn-secondary btn-sm" id="reset-likelihood-rubric">Reset to Defaults</button>
+          </div>
+          <p style="font-size:0.8rem; color:var(--color-text-secondary); margin-bottom:12px;">
+            Edit the probability ranges and criteria descriptions for each likelihood level.
+          </p>
+          <div class="rubric-editor" id="likelihood-editor">
+            <!-- Rendered by JS -->
+          </div>
+        </div>
+
+        <hr style="border:none; border-top:1px solid var(--color-border); margin:20px 0;">
+
+        <!-- Impact Scale Editor -->
+        <div class="form-group">
+          <div class="rubric-editor-header">
+            <label>Impact Scale</label>
+            <button type="button" class="btn btn-secondary btn-sm" id="reset-impact-rubric">Reset to Defaults</button>
+          </div>
+          <p style="font-size:0.8rem; color:var(--color-text-secondary); margin-bottom:12px;">
+            Edit the category descriptions for each impact level.
+          </p>
+          <div class="rubric-editor" id="impact-editor">
+            <!-- Rendered by JS -->
+          </div>
+        </div>
       </div>
       <div class="modal-footer">
         <button class="btn btn-secondary" id="settings-cancel">Cancel</button>
@@ -1525,7 +1659,7 @@
       'Critical'
     ];
 
-    const LIKELIHOOD_RUBRIC = [
+    const DEFAULT_LIKELIHOOD_RUBRIC = [
       { score: 5, rating: 'Expected', prob: '90-100%', criteria: 'With certainty, the event is expected to occur.' },
       { score: 4, rating: 'Highly Likely', prob: '60-90%', criteria: 'There is a high chance of this event occurring.' },
       { score: 3, rating: 'Likely', prob: '35-60%', criteria: 'The risk event or circumstance is likely to occur.' },
@@ -1533,7 +1667,7 @@
       { score: 1, rating: 'Remote', prob: '<5%', criteria: 'There is a rare chance of the risk event or circumstance occurring.' }
     ];
 
-    const IMPACT_RUBRIC = [
+    const DEFAULT_IMPACT_RUBRIC = [
       {
         score: 5, rating: 'Critical',
         trust: 'Permanent loss of stakeholder trust. Failure to meet SLA for 15% of users, subscribers, and members.',
@@ -1571,8 +1705,13 @@
       }
     ];
 
+    // Mutable rubric state (initialized from defaults, overridden by saved data)
+    let likelihoodRubric = JSON.parse(JSON.stringify(DEFAULT_LIKELIHOOD_RUBRIC));
+    let impactRubric = JSON.parse(JSON.stringify(DEFAULT_IMPACT_RUBRIC));
+
     const STORAGE_KEY = 'riskHeatMapData';
     const APPETITE_KEY = 'riskAppetiteThreshold';
+    const RUBRIC_KEY = 'risk_rubric_data';
     const DEFAULT_APPETITE = 12;
 
     function getColorForScore(score) {
@@ -1648,6 +1787,15 @@
               legal: data.weights.legal || 25,
               val: data.weights.val || 25
             };
+            recalculateRiskImpacts();
+          }
+          if (data.rubricData) {
+            if (data.rubricData.likelihood && Array.isArray(data.rubricData.likelihood) && data.rubricData.likelihood.length === 5) {
+              likelihoodRubric = data.rubricData.likelihood;
+            }
+            if (data.rubricData.impact && Array.isArray(data.rubricData.impact) && data.rubricData.impact.length === 5) {
+              impactRubric = data.rubricData.impact;
+            }
           }
           renderGrid();
           renderStats();
@@ -1756,6 +1904,39 @@
       if (firebaseInitialized) {
         db.ref('settings/weights').set(impactWeights).catch(e => {
           console.warn('Failed to save weights to Firebase:', e);
+        });
+      }
+    }
+
+    // ===== RUBRIC DATA PERSISTENCE =====
+    function loadRubricData() {
+      try {
+        const data = localStorage.getItem(RUBRIC_KEY);
+        if (data) {
+          const parsed = JSON.parse(data);
+          if (parsed && parsed.likelihood && Array.isArray(parsed.likelihood) && parsed.likelihood.length === 5) {
+            likelihoodRubric = parsed.likelihood;
+          }
+          if (parsed && parsed.impact && Array.isArray(parsed.impact) && parsed.impact.length === 5) {
+            impactRubric = parsed.impact;
+          }
+        }
+      } catch (e) {
+        console.warn('Failed to load rubric data:', e);
+      }
+    }
+
+    function saveRubricData() {
+      const data = { likelihood: likelihoodRubric, impact: impactRubric };
+      try {
+        localStorage.setItem(RUBRIC_KEY, JSON.stringify(data));
+      } catch (e) {
+        console.warn('Failed to save rubric data:', e);
+      }
+
+      if (firebaseInitialized) {
+        db.ref('settings/rubricData').set(data).catch(e => {
+          console.warn('Failed to save rubric data to Firebase:', e);
         });
       }
     }
@@ -2296,7 +2477,7 @@
       const tbody = document.getElementById('likelihood-tbody');
       tbody.innerHTML = '';
 
-      LIKELIHOOD_RUBRIC.forEach(item => {
+      likelihoodRubric.forEach(item => {
         const tr = document.createElement('tr');
         tr.setAttribute('data-score', item.score);
         tr.onclick = () => selectLikelihoodRow(item, tr);
@@ -2351,7 +2532,7 @@
       const tbody = document.getElementById('impact-tbody');
       tbody.innerHTML = '';
 
-      IMPACT_RUBRIC.forEach(item => {
+      impactRubric.forEach(item => {
         const tr = document.createElement('tr');
         tr.setAttribute('data-score', item.score);
 
@@ -2489,6 +2670,7 @@
       risks = loadRisks();
       appetiteThreshold = loadAppetite();
       impactWeights = loadWeights();
+      loadRubricData();
 
       // 2. Initialize Firebase
       const fbStarted = initFirebase();
@@ -2577,6 +2759,10 @@
         document.getElementById(id).addEventListener('input', updateWeightTotalDisplay);
       });
 
+      // Rubric editor reset buttons
+      document.getElementById('reset-likelihood-rubric').addEventListener('click', resetLikelihoodRubricEditor);
+      document.getElementById('reset-impact-rubric').addEventListener('click', resetImpactRubricEditor);
+
       // Cross-tab sync
       window.addEventListener('storage', function (e) {
         if (e.key === STORAGE_KEY) {
@@ -2597,6 +2783,20 @@
         }
         if (e.key === WEIGHTS_KEY) {
           impactWeights = loadWeights();
+          recalculateRiskImpacts();
+          renderGrid();
+          renderStats();
+          if (currentDetailCell) {
+            openDetail(currentDetailCell.likelihood, currentDetailCell.impact);
+          }
+        }
+        if (e.key === RUBRIC_KEY) {
+          loadRubricData();
+          renderGrid();
+          renderStats();
+          if (currentDetailCell) {
+            openDetail(currentDetailCell.likelihood, currentDetailCell.impact);
+          }
         }
       });
     }
@@ -2624,6 +2824,11 @@
       document.getElementById('settings-w-val').value = impactWeights.val;
 
       updateWeightTotalDisplay();
+
+      // Render rubric editors with current data
+      renderLikelihoodEditor();
+      renderImpactEditor();
+
       document.getElementById('settings-backdrop').classList.add('active');
     }
 
@@ -2645,6 +2850,35 @@
         display.classList.add('invalid');
       } else {
         display.classList.remove('invalid');
+      }
+    }
+
+    function recalculateRiskImpacts() {
+      // Recalculate the impact score for all existing risks using the current global weights
+      const w = impactWeights;
+      const totalWeight = w.trust + w.ops + w.legal + w.val;
+      if (totalWeight === 0) return;
+
+      let changed = false;
+      risks.forEach(risk => {
+        if (risk.impactDetails) {
+          const d = risk.impactDetails;
+          // Only recalculate if all 4 category scores are present
+          if (d.trust && d.ops && d.legal && d.val) {
+            const weightedSum = (d.trust * w.trust) + (d.ops * w.ops) + (d.legal * w.legal) + (d.val * w.val);
+            const newImpact = Math.round(weightedSum / totalWeight);
+            if (newImpact !== risk.impact) {
+              risk.impact = newImpact;
+              changed = true;
+            }
+            // Update the stored weights snapshot to reflect the new weights
+            risk.impactWeights = { ...w };
+          }
+        }
+      });
+
+      if (changed) {
+        saveRisks();
       }
     }
 
@@ -2674,6 +2908,15 @@
       impactWeights = newWeights;
       saveWeights();
 
+      // Recalculate all existing risk impact scores with new weights
+      recalculateRiskImpacts();
+
+      // Collect and save rubric edits
+      const rubricEdits = collectRubricEdits();
+      likelihoodRubric = rubricEdits.likelihood;
+      impactRubric = rubricEdits.impact;
+      saveRubricData();
+
       // Update UI
       closeSettingsModal();
       renderGrid();
@@ -2682,6 +2925,173 @@
       if (currentDetailCell) {
         openDetail(currentDetailCell.likelihood, currentDetailCell.impact);
       }
+    }
+
+    // ===== RUBRIC EDITOR FUNCTIONS =====
+    function renderLikelihoodEditor() {
+      const container = document.getElementById('likelihood-editor');
+      container.innerHTML = '';
+
+      likelihoodRubric.forEach(item => {
+        const div = document.createElement('div');
+        div.className = 'rubric-editor-item';
+        div.setAttribute('data-score', item.score);
+
+        const badgeColor = LEVEL_COLORS[item.score - 1];
+
+        div.innerHTML = `
+          <span class="editor-rating" style="background:${badgeColor};">${item.rating} (${item.score})</span>
+          <div class="editor-fields likelihood-fields">
+            <div class="editor-field">
+              <span class="editor-field-label">Probability</span>
+              <input type="text" class="lik-prob" value="${escapeAttr(item.prob)}">
+            </div>
+            <div class="editor-field">
+              <span class="editor-field-label">Criteria</span>
+              <textarea class="lik-criteria">${escapeHtml(item.criteria)}</textarea>
+            </div>
+          </div>
+        `;
+
+        container.appendChild(div);
+      });
+    }
+
+    function renderImpactEditor() {
+      const container = document.getElementById('impact-editor');
+      container.innerHTML = '';
+
+      const catLabels = {
+        trust: 'Trust / Reputational',
+        ops: 'Operational Scope',
+        legal: 'Legal / Compliance / Environmental',
+        val: 'Enterprise Value'
+      };
+
+      impactRubric.forEach(item => {
+        const div = document.createElement('div');
+        div.className = 'rubric-editor-item';
+        div.setAttribute('data-score', item.score);
+
+        const badgeColor = LEVEL_COLORS[item.score - 1];
+
+        let fieldsHtml = '';
+        ['trust', 'ops', 'legal', 'val'].forEach(cat => {
+          fieldsHtml += `
+            <div class="editor-field">
+              <span class="editor-field-label">${catLabels[cat]}</span>
+              <textarea class="imp-${cat}">${escapeHtml(item[cat])}</textarea>
+            </div>
+          `;
+        });
+
+        div.innerHTML = `
+          <span class="editor-rating" style="background:${badgeColor};">${item.rating} (${item.score})</span>
+          <div class="editor-fields impact-fields">
+            ${fieldsHtml}
+          </div>
+        `;
+
+        container.appendChild(div);
+      });
+    }
+
+    function collectRubricEdits() {
+      const likItems = document.querySelectorAll('#likelihood-editor .rubric-editor-item');
+      const newLikelihood = [];
+      likItems.forEach(item => {
+        const score = parseInt(item.getAttribute('data-score'), 10);
+        const base = likelihoodRubric.find(r => r.score === score) || DEFAULT_LIKELIHOOD_RUBRIC.find(r => r.score === score);
+        newLikelihood.push({
+          score: score,
+          rating: base.rating,
+          prob: item.querySelector('.lik-prob').value.trim() || base.prob,
+          criteria: item.querySelector('.lik-criteria').value.trim() || base.criteria
+        });
+      });
+
+      const impItems = document.querySelectorAll('#impact-editor .rubric-editor-item');
+      const newImpact = [];
+      impItems.forEach(item => {
+        const score = parseInt(item.getAttribute('data-score'), 10);
+        const base = impactRubric.find(r => r.score === score) || DEFAULT_IMPACT_RUBRIC.find(r => r.score === score);
+        newImpact.push({
+          score: score,
+          rating: base.rating,
+          trust: item.querySelector('.imp-trust').value.trim() || base.trust,
+          ops: item.querySelector('.imp-ops').value.trim() || base.ops,
+          legal: item.querySelector('.imp-legal').value.trim() || base.legal,
+          val: item.querySelector('.imp-val').value.trim() || base.val
+        });
+      });
+
+      return { likelihood: newLikelihood, impact: newImpact };
+    }
+
+    function escapeAttr(str) {
+      return str.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+
+    function resetLikelihoodRubricEditor() {
+      // Render editor with defaults without mutating state
+      // State is only updated when the user clicks Save
+      const container = document.getElementById('likelihood-editor');
+      container.innerHTML = '';
+      DEFAULT_LIKELIHOOD_RUBRIC.forEach(item => {
+        const div = document.createElement('div');
+        div.className = 'rubric-editor-item';
+        div.setAttribute('data-score', item.score);
+        const badgeColor = LEVEL_COLORS[item.score - 1];
+        div.innerHTML = `
+          <span class="editor-rating" style="background:${badgeColor};">${item.rating} (${item.score})</span>
+          <div class="editor-fields likelihood-fields">
+            <div class="editor-field">
+              <span class="editor-field-label">Probability</span>
+              <input type="text" class="lik-prob" value="${escapeAttr(item.prob)}">
+            </div>
+            <div class="editor-field">
+              <span class="editor-field-label">Criteria</span>
+              <textarea class="lik-criteria">${escapeHtml(item.criteria)}</textarea>
+            </div>
+          </div>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    function resetImpactRubricEditor() {
+      // Render editor with defaults without mutating state
+      // State is only updated when the user clicks Save
+      const container = document.getElementById('impact-editor');
+      container.innerHTML = '';
+      const catLabels = {
+        trust: 'Trust / Reputational',
+        ops: 'Operational Scope',
+        legal: 'Legal / Compliance / Environmental',
+        val: 'Enterprise Value'
+      };
+      DEFAULT_IMPACT_RUBRIC.forEach(item => {
+        const div = document.createElement('div');
+        div.className = 'rubric-editor-item';
+        div.setAttribute('data-score', item.score);
+        const badgeColor = LEVEL_COLORS[item.score - 1];
+        let fieldsHtml = '';
+        ['trust', 'ops', 'legal', 'val'].forEach(cat => {
+          fieldsHtml += `
+            <div class="editor-field">
+              <span class="editor-field-label">${catLabels[cat]}</span>
+              <textarea class="imp-${cat}">${escapeHtml(item[cat])}</textarea>
+            </div>
+          `;
+        });
+        div.innerHTML = `
+          <span class="editor-rating" style="background:${badgeColor};">${item.rating} (${item.score})</span>
+          <div class="editor-fields impact-fields">
+            ${fieldsHtml}
+          </div>
+        `;
+        container.appendChild(div);
+      });
     }
 
     document.addEventListener('DOMContentLoaded', init);
