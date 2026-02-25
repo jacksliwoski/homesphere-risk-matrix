@@ -1371,271 +1371,295 @@
     }
 
     /* ===== COMPANY PROFILE VIEW ===== */
+    /* Technical reference aesthetic - circuit board copper/amber accents */
     .company-view {
-      max-width: 1100px;
+      max-width: 1200px;
       margin: 0 auto;
-      padding: 24px;
+      padding: 32px 24px;
     }
 
+    /* Technical header - spec sheet layout */
     .company-hero {
-      background: linear-gradient(135deg, #0a0a0a 0%, #1e293b 100%);
-      border-radius: var(--radius);
-      padding: 48px 40px;
-      color: #fff;
+      background: #ffffff;
+      border: 2px solid rgba(184, 115, 51, 0.2);
+      border-radius: 2px;
+      padding: 0;
       margin-bottom: 24px;
-      position: relative;
       overflow: hidden;
     }
 
-    .company-hero::before {
-      content: '';
-      position: absolute;
-      top: -50%;
-      right: -20%;
-      width: 500px;
-      height: 500px;
-      background: radial-gradient(circle, rgba(0, 180, 216, 0.12) 0%, transparent 70%);
-      pointer-events: none;
-    }
-
-    .company-hero-content {
-      position: relative;
-      z-index: 1;
+    .company-hero-header {
+      background: #0a0a0a;
+      padding: 16px 24px;
+      border-bottom: 2px solid #b87333;
     }
 
     .company-hero-tagline {
-      font-size: 0.8rem;
+      font-size: 0.7rem;
       font-weight: 600;
       text-transform: uppercase;
-      letter-spacing: 0.15em;
-      color: var(--color-primary);
-      margin-bottom: 8px;
+      letter-spacing: 0.1em;
+      color: #b87333;
+      margin-bottom: 4px;
     }
 
     .company-hero h2 {
-      font-size: 2.2rem;
+      font-size: 1.75rem;
       font-weight: 700;
-      letter-spacing: -0.02em;
-      margin-bottom: 12px;
+      letter-spacing: -0.015em;
+      color: #ffffff;
+      margin: 0;
+    }
+
+    .company-hero-body {
+      padding: 24px;
     }
 
     .company-hero-desc {
-      font-size: 1rem;
-      color: #94a3b8;
-      max-width: 600px;
+      font-size: 0.95rem;
+      color: var(--color-text);
       line-height: 1.6;
-      margin-bottom: 32px;
+      margin-bottom: 24px;
+      max-width: 700px;
     }
 
     .company-hero-stats {
-      display: flex;
-      gap: 16px;
-      flex-wrap: wrap;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0;
+      border: 1px solid rgba(184, 115, 51, 0.2);
     }
 
     .company-hero-stat {
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 8px;
-      padding: 16px 24px;
-      min-width: 150px;
-      text-align: center;
+      padding: 16px;
+      border-right: 1px solid rgba(184, 115, 51, 0.2);
+      text-align: left;
     }
 
-    .company-hero-stat .stat-val {
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: var(--color-primary);
-      display: block;
+    .company-hero-stat:last-child {
+      border-right: none;
     }
 
     .company-hero-stat .stat-lbl {
-      font-size: 0.75rem;
-      color: #94a3b8;
+      font-size: 0.7rem;
+      color: #64748b;
       text-transform: uppercase;
-      letter-spacing: 0.05em;
-      margin-top: 4px;
-      display: block;
-    }
-
-    .company-section {
-      background: var(--color-surface);
-      border-radius: var(--radius);
-      padding: 28px 32px;
-      margin-bottom: 20px;
-      box-shadow: var(--shadow);
-    }
-
-    .company-section h3 {
-      font-size: 1.05rem;
-      font-weight: 700;
-      color: var(--color-text);
-      margin-bottom: 16px;
-      padding-left: 14px;
-      border-left: 3px solid var(--color-primary);
-    }
-
-    .company-section p {
-      color: var(--color-text-secondary);
-      line-height: 1.7;
-      font-size: 0.92rem;
-    }
-
-    .company-mission-block {
-      background: linear-gradient(135deg, rgba(0, 180, 216, 0.06) 0%, rgba(0, 180, 216, 0.02) 100%);
-      border-left: 3px solid var(--color-primary);
-      padding: 20px 24px;
-      border-radius: 0 var(--radius) var(--radius) 0;
-      margin-top: 12px;
-    }
-
-    .company-mission-block p {
-      color: var(--color-text);
-      font-size: 1rem;
-      font-weight: 500;
-      font-style: italic;
-    }
-
-    .company-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 16px;
-      margin-top: 12px;
-    }
-
-    .company-product-card {
-      background: var(--color-bg);
-      border-radius: var(--radius);
-      padding: 20px;
-      border: 1px solid var(--color-border);
-      transition: transform 0.15s, box-shadow 0.15s;
-    }
-
-    .company-product-card:hover {
-      transform: translateY(-2px);
-      box-shadow: var(--shadow-lg);
-    }
-
-    .company-product-card .product-icon {
-      font-size: 1.8rem;
-      margin-bottom: 10px;
-      display: block;
-    }
-
-    .company-product-card h4 {
-      font-size: 0.92rem;
+      letter-spacing: 0.06em;
       font-weight: 600;
-      color: var(--color-text);
+      display: block;
       margin-bottom: 6px;
     }
 
-    .company-product-card p {
-      font-size: 0.82rem;
-      color: var(--color-text-secondary);
-      line-height: 1.5;
+    .company-hero-stat .stat-val {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: #0a0a0a;
+      display: block;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: -0.02em;
     }
 
+    /* Modular panel system */
+    .company-section {
+      background: #ffffff;
+      border: 1px solid rgba(184, 115, 51, 0.15);
+      border-radius: 2px;
+      padding: 0;
+      margin-bottom: 16px;
+    }
+
+    .company-section-header {
+      padding: 12px 20px;
+      background: #fafafa;
+      border-bottom: 1px solid rgba(184, 115, 51, 0.15);
+    }
+
+    .company-section h3 {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #0a0a0a;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin: 0;
+    }
+
+    .company-section-body {
+      padding: 20px;
+    }
+
+    .company-section p {
+      color: var(--color-text);
+      line-height: 1.65;
+      font-size: 0.9rem;
+      margin: 0 0 12px 0;
+    }
+
+    .company-section p:last-child {
+      margin-bottom: 0;
+    }
+
+    /* Mission statement */
+    .company-mission-block {
+      background: rgba(184, 115, 51, 0.04);
+      border-left: 3px solid #b87333;
+      padding: 16px 20px;
+      margin-top: 16px;
+    }
+
+    .company-mission-block p {
+      color: #0a0a0a;
+      font-size: 0.95rem;
+      font-weight: 600;
+      margin: 0;
+    }
+
+    /* Product catalog - technical list */
+    .company-product-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 0;
+      border: 1px solid rgba(184, 115, 51, 0.15);
+    }
+
+    .company-product-item {
+      padding: 16px 20px;
+      border-bottom: 1px solid rgba(184, 115, 51, 0.15);
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 16px;
+      align-items: start;
+      transition: background 0.12s;
+    }
+
+    .company-product-item:last-child {
+      border-bottom: none;
+    }
+
+    .company-product-item:hover {
+      background: rgba(184, 115, 51, 0.02);
+    }
+
+    .company-product-code {
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: #b87333;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-variant-numeric: tabular-nums;
+      padding-top: 2px;
+    }
+
+    .company-product-content h4 {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: #0a0a0a;
+      margin: 0 0 4px 0;
+      letter-spacing: -0.01em;
+    }
+
+    .company-product-content p {
+      font-size: 0.85rem;
+      color: #64748b;
+      line-height: 1.5;
+      margin: 0;
+    }
+
+    /* Technical tags */
     .company-tags {
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
-      margin-top: 12px;
+      margin-top: 16px;
     }
 
     .company-tag {
       display: inline-block;
-      padding: 5px 14px;
-      border-radius: 20px;
-      font-size: 0.78rem;
-      font-weight: 500;
-      background: rgba(0, 180, 216, 0.1);
-      color: var(--color-primary);
-      border: 1px solid rgba(0, 180, 216, 0.2);
+      padding: 6px 12px;
+      border: 1px solid rgba(184, 115, 51, 0.25);
+      font-size: 0.75rem;
+      font-weight: 600;
+      background: rgba(184, 115, 51, 0.04);
+      color: #0a0a0a;
+      letter-spacing: 0.02em;
     }
 
     .company-tag.neutral {
-      background: var(--color-bg);
-      color: var(--color-text-secondary);
-      border-color: var(--color-border);
+      background: #fafafa;
+      color: #64748b;
+      border-color: #e2e8f0;
     }
 
-    .company-roles-list {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 10px;
-      margin-top: 12px;
-    }
-
-    .company-role-item {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 12px 16px;
-      background: var(--color-bg);
-      border-radius: var(--radius);
-      border: 1px solid var(--color-border);
-    }
-
-    .company-role-item .role-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: var(--color-primary);
-      flex-shrink: 0;
-    }
-
-    .company-role-item span {
-      font-size: 0.85rem;
-      color: var(--color-text);
-      font-weight: 500;
-    }
-
+    /* Department grid */
     .company-dept-grid {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 12px;
-      margin-bottom: 20px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 8px;
     }
 
     .company-dept-item {
-      padding: 10px 18px;
-      background: linear-gradient(135deg, #0a0a0a 0%, #1e293b 100%);
-      color: #fff;
-      border-radius: 6px;
-      font-size: 0.82rem;
-      font-weight: 500;
+      padding: 12px 16px;
+      background: #0a0a0a;
+      color: #ffffff;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      border-left: 3px solid #b87333;
     }
 
+    /* Roles list */
+    .company-roles-list {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+    }
+
+    .company-role-item {
+      padding: 12px 16px;
+      border: 1px solid rgba(184, 115, 51, 0.15);
+      font-size: 0.85rem;
+      color: #0a0a0a;
+      font-weight: 500;
+      background: #ffffff;
+    }
+
+    /* Maturity indicators */
     .company-maturity-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 12px;
-      margin-top: 12px;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0;
+      border: 1px solid rgba(184, 115, 51, 0.15);
     }
 
     .company-maturity-item {
-      padding: 16px;
-      border-radius: var(--radius);
-      border: 1px solid var(--color-border);
-      background: var(--color-bg);
+      padding: 14px 16px;
+      border-right: 1px solid rgba(184, 115, 51, 0.15);
+      border-bottom: 1px solid rgba(184, 115, 51, 0.15);
+    }
+
+    .company-maturity-item:nth-child(2n) {
+      border-right: none;
+    }
+
+    .company-maturity-item:nth-last-child(-n+2) {
+      border-bottom: none;
     }
 
     .company-maturity-item .maturity-label {
-      font-size: 0.78rem;
-      color: var(--color-text-secondary);
+      font-size: 0.7rem;
+      color: #64748b;
       text-transform: uppercase;
-      letter-spacing: 0.04em;
-      margin-bottom: 8px;
+      letter-spacing: 0.05em;
+      font-weight: 600;
+      margin-bottom: 6px;
       display: block;
     }
 
     .company-maturity-item .maturity-status {
-      font-size: 0.88rem;
+      font-size: 0.85rem;
       font-weight: 600;
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 8px;
     }
 
     .company-maturity-item .maturity-status.mature {
@@ -1643,108 +1667,100 @@
     }
 
     .company-maturity-item .maturity-status.developing {
-      color: var(--color-orange);
+      color: #d97706;
     }
 
-    .maturity-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
+    .maturity-indicator {
+      width: 6px;
+      height: 6px;
+      border-radius: 1px;
       display: inline-block;
     }
 
-    .maturity-dot.green { background: var(--color-green); }
-    .maturity-dot.orange { background: var(--color-orange); }
+    .maturity-indicator.green { background: var(--color-green); }
+    .maturity-indicator.orange { background: #d97706; }
 
+    /* Challenges & Opportunities */
     .company-challenges-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 20px;
-      margin-top: 12px;
+      gap: 24px;
     }
 
     .company-challenges-col h4 {
-      font-size: 0.82rem;
-      font-weight: 600;
+      font-size: 0.75rem;
+      font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: 0.04em;
-      color: var(--color-text-secondary);
+      letter-spacing: 0.06em;
+      color: #64748b;
       margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid rgba(184, 115, 51, 0.15);
     }
 
     .company-challenges-col ul {
       list-style: none;
       padding: 0;
+      margin: 0;
     }
 
     .company-challenges-col li {
-      padding: 10px 14px;
-      background: var(--color-bg);
-      border-radius: 6px;
+      padding: 10px 0 10px 16px;
+      border-left: 2px solid rgba(184, 115, 51, 0.15);
       margin-bottom: 8px;
       font-size: 0.85rem;
       color: var(--color-text);
-      display: flex;
-      align-items: flex-start;
-      gap: 8px;
       line-height: 1.5;
     }
 
-    .company-challenges-col li .ch-icon {
-      flex-shrink: 0;
-      margin-top: 2px;
+    .company-challenges-col li:last-child {
+      margin-bottom: 0;
     }
 
+    /* Dependencies list */
     .company-deps-list {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 10px;
-      margin-top: 12px;
+      gap: 8px;
     }
 
     .company-dep-item {
-      display: flex;
-      align-items: center;
-      gap: 10px;
       padding: 12px 16px;
-      background: var(--color-bg);
-      border-radius: var(--radius);
-      border: 1px solid var(--color-border);
+      border: 1px solid rgba(184, 115, 51, 0.15);
       font-size: 0.85rem;
-      color: var(--color-text);
+      color: #0a0a0a;
+      font-weight: 500;
+      background: #ffffff;
     }
 
-    .company-dep-item .dep-icon {
-      font-size: 1.1rem;
-    }
-
+    /* Manufacturing note */
     .company-mfg-note {
-      display: flex;
-      align-items: center;
-      gap: 10px;
       margin-top: 16px;
       padding: 14px 18px;
-      background: rgba(0, 180, 216, 0.06);
-      border-radius: var(--radius);
-      border: 1px solid rgba(0, 180, 216, 0.15);
+      background: rgba(184, 115, 51, 0.04);
+      border: 1px solid rgba(184, 115, 51, 0.2);
       font-size: 0.85rem;
       color: var(--color-text);
     }
 
+    .company-mfg-note strong {
+      color: #0a0a0a;
+      font-weight: 600;
+    }
+
+    /* Differentiator callout */
     .company-differentiator {
-      background: linear-gradient(135deg, rgba(0, 180, 216, 0.08) 0%, rgba(34, 197, 94, 0.06) 100%);
-      border: 1px solid rgba(0, 180, 216, 0.2);
-      border-radius: var(--radius);
-      padding: 18px 22px;
+      background: rgba(184, 115, 51, 0.04);
+      border: 2px solid #b87333;
+      padding: 16px 20px;
       margin-bottom: 16px;
-      display: flex;
-      align-items: flex-start;
-      gap: 12px;
     }
 
     .company-differentiator p {
-      color: var(--color-text) !important;
-      font-weight: 500;
+      color: #0a0a0a;
+      font-weight: 600;
+      font-size: 0.9rem;
+      margin: 0;
     }
 
     /* ===== RACI VIEW ===== */
@@ -1992,27 +2008,49 @@
         padding: 16px;
       }
 
-      .company-hero {
-        padding: 32px 24px;
+      .company-hero-header {
+        padding: 12px 16px;
       }
 
       .company-hero h2 {
-        font-size: 1.6rem;
+        font-size: 1.4rem;
+      }
+
+      .company-hero-body {
+        padding: 16px;
       }
 
       .company-hero-stats {
-        flex-direction: column;
+        grid-template-columns: 1fr;
+        gap: 0;
       }
 
       .company-hero-stat {
-        min-width: unset;
+        border-right: none;
+        border-bottom: 1px solid rgba(184, 115, 51, 0.2);
       }
 
-      .company-section {
-        padding: 20px;
+      .company-hero-stat:last-child {
+        border-bottom: none;
       }
 
-      .company-grid,
+      .company-section-header {
+        padding: 10px 16px;
+      }
+
+      .company-section-body {
+        padding: 16px;
+      }
+
+      .company-product-item {
+        grid-template-columns: 1fr;
+        gap: 8px;
+      }
+
+      .company-dept-grid {
+        grid-template-columns: 1fr;
+      }
+
       .company-roles-list,
       .company-challenges-grid,
       .company-deps-list {
@@ -2021,6 +2059,15 @@
 
       .company-maturity-grid {
         grid-template-columns: 1fr;
+      }
+
+      .company-maturity-item {
+        border-right: none;
+        border-bottom: 1px solid rgba(184, 115, 51, 0.15);
+      }
+
+      .company-maturity-item:last-child {
+        border-bottom: none;
       }
     }
   </style>
@@ -2135,7 +2182,6 @@
       <div class="raci-actions">
         <button class="btn btn-secondary" id="add-task-btn">+ Add Task</button>
         <button class="btn btn-secondary" id="add-role-btn">+ Add Role</button>
-        <button class="btn btn-secondary" id="import-risks-btn">Import from Risks</button>
       </div>
     </div>
 
@@ -2180,24 +2226,26 @@
   <!-- COMPANY PROFILE VIEW -->
   <section class="company-view" id="company-view" style="display:none;">
 
-    <!-- Hero Section -->
+    <!-- Technical Header -->
     <div class="company-hero">
-      <div class="company-hero-content">
+      <div class="company-hero-header">
         <div class="company-hero-tagline">Consumer Robotics &amp; Automation</div>
         <h2>HomeSphere Robotics</h2>
+      </div>
+      <div class="company-hero-body">
         <p class="company-hero-desc">Designing humanoid and home-automation robots for household assistance, elder care, and personal productivity.</p>
         <div class="company-hero-stats">
           <div class="company-hero-stat">
-            <span class="stat-val">2020</span>
             <span class="stat-lbl">Founded</span>
+            <span class="stat-val">2020</span>
           </div>
           <div class="company-hero-stat">
-            <span class="stat-val">1,050</span>
             <span class="stat-lbl">Employees</span>
+            <span class="stat-val">1,050</span>
           </div>
           <div class="company-hero-stat">
-            <span class="stat-val">Palo Alto</span>
-            <span class="stat-lbl">Headquarters, CA</span>
+            <span class="stat-lbl">Headquarters</span>
+            <span class="stat-val">Palo Alto, CA</span>
           </div>
         </div>
       </div>
@@ -2205,133 +2253,151 @@
 
     <!-- Founding Story & Mission -->
     <div class="company-section">
-      <h3>Founding Story &amp; Mission</h3>
-      <p>Founded in 2020 by a former robotics lead from a major tech company, HomeSphere Robotics set out to transform the relationship between humans and machines in everyday environments.</p>
-      <div class="company-mission-block">
-        <p>Our mission is to bring safe, affordable robotics into everyday homes and workplaces.</p>
+      <div class="company-section-header">
+        <h3>Founding Story &amp; Mission</h3>
+      </div>
+      <div class="company-section-body">
+        <p>Founded in 2020 by a former robotics lead from a major tech company, HomeSphere Robotics set out to transform the relationship between humans and machines in everyday environments.</p>
+        <div class="company-mission-block">
+          <p>Our mission is to bring safe, affordable robotics into everyday homes and workplaces.</p>
+        </div>
       </div>
     </div>
 
     <!-- Product Portfolio -->
     <div class="company-section">
-      <h3>Product Portfolio</h3>
-      <div class="company-grid">
-        <div class="company-product-card">
-          <span class="product-icon">&#129302;</span>
-          <h4>Home Assistant Robot</h4>
-          <p>A humanoid robot designed for general household assistance, task management, and daily support.</p>
-        </div>
-        <div class="company-product-card">
-          <span class="product-icon">&#128105;&#8205;&#9877;&#65039;</span>
-          <h4>Elder-Care Monitoring Robot</h4>
-          <p>Specialized monitoring and response system for elderly care, providing safety oversight and emergency detection.</p>
-        </div>
-        <div class="company-product-card">
-          <span class="product-icon">&#127968;</span>
-          <h4>Household Automation Platform</h4>
-          <p>Comprehensive smart-home integration platform for seamless control of connected devices and automation routines.</p>
-        </div>
-        <div class="company-product-card">
-          <span class="product-icon">&#128187;</span>
-          <h4>Robotics SDK</h4>
-          <p>Developer toolkit enabling third-party integration and custom application development on the HomeSphere platform.</p>
+      <div class="company-section-header">
+        <h3>Product Portfolio</h3>
+      </div>
+      <div class="company-section-body">
+        <div class="company-product-grid">
+          <div class="company-product-item">
+            <div class="company-product-code">HS-HAR</div>
+            <div class="company-product-content">
+              <h4>Home Assistant Robot</h4>
+              <p>A humanoid robot designed for general household assistance, task management, and daily support.</p>
+            </div>
+          </div>
+          <div class="company-product-item">
+            <div class="company-product-code">HS-ECM</div>
+            <div class="company-product-content">
+              <h4>Elder-Care Monitoring Robot</h4>
+              <p>Specialized monitoring and response system for elderly care, providing safety oversight and emergency detection.</p>
+            </div>
+          </div>
+          <div class="company-product-item">
+            <div class="company-product-code">HS-HAP</div>
+            <div class="company-product-content">
+              <h4>Household Automation Platform</h4>
+              <p>Comprehensive smart-home integration platform for seamless control of connected devices and automation routines.</p>
+            </div>
+          </div>
+          <div class="company-product-item">
+            <div class="company-product-code">HS-SDK</div>
+            <div class="company-product-content">
+              <h4>Robotics SDK</h4>
+              <p>Developer toolkit enabling third-party integration and custom application development on the HomeSphere platform.</p>
+            </div>
+          </div>
         </div>
       </div>
     </div>
 
     <!-- Organizational Structure -->
     <div class="company-section">
-      <h3>Organizational Structure</h3>
-      <p style="margin-bottom: 8px; font-size: 0.82rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; color: var(--color-text-secondary);">Departments</p>
-      <div class="company-dept-grid">
-        <div class="company-dept-item">Robotics Engineering</div>
-        <div class="company-dept-item">AI Systems</div>
-        <div class="company-dept-item">Manufacturing</div>
-        <div class="company-dept-item">Customer Experience</div>
-        <div class="company-dept-item">Safety &amp; Compliance</div>
+      <div class="company-section-header">
+        <h3>Organizational Structure</h3>
       </div>
-      <p style="margin-bottom: 8px; font-size: 0.82rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; color: var(--color-text-secondary);">Key Roles</p>
-      <div class="company-roles-list">
-        <div class="company-role-item">
-          <div class="role-dot"></div>
-          <span>Chief Robotics Officer</span>
+      <div class="company-section-body">
+        <p style="margin-bottom: 12px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #64748b;">Departments</p>
+        <div class="company-dept-grid">
+          <div class="company-dept-item">Robotics Engineering</div>
+          <div class="company-dept-item">AI Systems</div>
+          <div class="company-dept-item">Manufacturing</div>
+          <div class="company-dept-item">Customer Experience</div>
+          <div class="company-dept-item">Safety &amp; Compliance</div>
         </div>
-        <div class="company-role-item">
-          <div class="role-dot"></div>
-          <span>VP of AI Systems</span>
-        </div>
-        <div class="company-role-item">
-          <div class="role-dot"></div>
-          <span>Head of Safety Engineering</span>
-        </div>
-        <div class="company-role-item">
-          <div class="role-dot"></div>
-          <span>Director of Manufacturing</span>
+        <p style="margin: 24px 0 12px 0; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #64748b;">Key Roles</p>
+        <div class="company-roles-list">
+          <div class="company-role-item">Chief Robotics Officer</div>
+          <div class="company-role-item">VP of AI Systems</div>
+          <div class="company-role-item">Head of Safety Engineering</div>
+          <div class="company-role-item">Director of Manufacturing</div>
         </div>
       </div>
     </div>
 
     <!-- Technology & Infrastructure -->
     <div class="company-section">
-      <h3>Technology &amp; Infrastructure</h3>
-      <p style="margin-bottom: 12px;">HomeSphere operates on a vertically integrated technology stack spanning custom hardware through cloud services.</p>
-      <div class="company-tags">
-        <span class="company-tag">Custom Robotics Hardware</span>
-        <span class="company-tag">Multimodal AI Models</span>
-        <span class="company-tag">Real-Time Motion Planning</span>
-        <span class="company-tag">Cloud Device Management</span>
+      <div class="company-section-header">
+        <h3>Technology &amp; Infrastructure</h3>
       </div>
-      <div class="company-mfg-note">
-        <span style="font-size: 1.2rem;">&#127981;</span>
-        <span>Manufacturing split between <strong>California, USA</strong> and <strong>Vietnam</strong></span>
+      <div class="company-section-body">
+        <p>HomeSphere operates on a vertically integrated technology stack spanning custom hardware through cloud services.</p>
+        <div class="company-tags">
+          <span class="company-tag">Custom Robotics Hardware</span>
+          <span class="company-tag">Multimodal AI Models</span>
+          <span class="company-tag">Real-Time Motion Planning</span>
+          <span class="company-tag">Cloud Device Management</span>
+        </div>
+        <div class="company-mfg-note">
+          Manufacturing split between <strong>California, USA</strong> and <strong>Vietnam</strong>
+        </div>
       </div>
     </div>
 
     <!-- Market Position -->
     <div class="company-section">
-      <h3>Market Position &amp; Competitive Landscape</h3>
-      <div class="company-differentiator">
-        <span style="font-size: 1.3rem; flex-shrink: 0;">&#9989;</span>
-        <p>HomeSphere differentiates through <strong>safety-first design</strong> and <strong>strong integration with smart-home ecosystems</strong>.</p>
+      <div class="company-section-header">
+        <h3>Market Position &amp; Competitive Landscape</h3>
       </div>
-      <p style="margin-bottom: 8px; font-size: 0.82rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; color: var(--color-text-secondary);">Key Competitors</p>
-      <div class="company-tags">
-        <span class="company-tag neutral">Figure AI</span>
-        <span class="company-tag neutral">Agility Robotics</span>
-        <span class="company-tag neutral">Emerging Consumer Robotics Startups</span>
+      <div class="company-section-body">
+        <div class="company-differentiator">
+          <p>HomeSphere differentiates through <strong>safety-first design</strong> and <strong>strong integration with smart-home ecosystems</strong>.</p>
+        </div>
+        <p style="margin-bottom: 12px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #64748b;">Key Competitors</p>
+        <div class="company-tags">
+          <span class="company-tag neutral">Figure AI</span>
+          <span class="company-tag neutral">Agility Robotics</span>
+          <span class="company-tag neutral">Emerging Consumer Robotics Startups</span>
+        </div>
       </div>
     </div>
 
     <!-- Risk & Compliance Maturity -->
     <div class="company-section">
-      <h3>Risk, Security &amp; Compliance Maturity</h3>
-      <div class="company-maturity-grid">
-        <div class="company-maturity-item">
-          <span class="maturity-label">Safety Engineering</span>
-          <div class="maturity-status mature">
-            <span class="maturity-dot green"></span>
-            Mature
+      <div class="company-section-header">
+        <h3>Risk, Security &amp; Compliance Maturity</h3>
+      </div>
+      <div class="company-section-body">
+        <div class="company-maturity-grid">
+          <div class="company-maturity-item">
+            <span class="maturity-label">Safety Engineering</span>
+            <div class="maturity-status mature">
+              <span class="maturity-indicator green"></span>
+              Mature
+            </div>
           </div>
-        </div>
-        <div class="company-maturity-item">
-          <span class="maturity-label">Cybersecurity</span>
-          <div class="maturity-status developing">
-            <span class="maturity-dot orange"></span>
-            Developing
+          <div class="company-maturity-item">
+            <span class="maturity-label">Cybersecurity</span>
+            <div class="maturity-status developing">
+              <span class="maturity-indicator orange"></span>
+              Developing
+            </div>
           </div>
-        </div>
-        <div class="company-maturity-item">
-          <span class="maturity-label">Privacy Governance</span>
-          <div class="maturity-status developing">
-            <span class="maturity-dot orange"></span>
-            Developing
+          <div class="company-maturity-item">
+            <span class="maturity-label">Privacy Governance</span>
+            <div class="maturity-status developing">
+              <span class="maturity-indicator orange"></span>
+              Developing
+            </div>
           </div>
-        </div>
-        <div class="company-maturity-item">
-          <span class="maturity-label">Robotics Safety Standards</span>
-          <div class="maturity-status developing">
-            <span class="maturity-dot orange"></span>
-            Ongoing Compliance
+          <div class="company-maturity-item">
+            <span class="maturity-label">Robotics Safety Standards</span>
+            <div class="maturity-status developing">
+              <span class="maturity-indicator orange"></span>
+              Ongoing Compliance
+            </div>
           </div>
         </div>
       </div>
@@ -2339,68 +2405,43 @@
 
     <!-- Operational Dependencies -->
     <div class="company-section">
-      <h3>Operational Dependencies</h3>
-      <div class="company-deps-list">
-        <div class="company-dep-item">
-          <span class="dep-icon">&#9881;&#65039;</span>
-          Robotics Component Suppliers
-        </div>
-        <div class="company-dep-item">
-          <span class="dep-icon">&#9729;&#65039;</span>
-          Cloud Connectivity
-        </div>
-        <div class="company-dep-item">
-          <span class="dep-icon">&#128259;</span>
-          Firmware Updates
-        </div>
-        <div class="company-dep-item">
-          <span class="dep-icon">&#127758;</span>
-          Global Logistics
-        </div>
-        <div class="company-dep-item">
-          <span class="dep-icon">&#128269;</span>
-          Real-Time Diagnostics
-        </div>
-        <div class="company-dep-item">
-          <span class="dep-icon">&#127897;&#65039;</span>
-          Remote Troubleshooting
+      <div class="company-section-header">
+        <h3>Operational Dependencies</h3>
+      </div>
+      <div class="company-section-body">
+        <div class="company-deps-list">
+          <div class="company-dep-item">Robotics Component Suppliers</div>
+          <div class="company-dep-item">Cloud Connectivity</div>
+          <div class="company-dep-item">Firmware Updates</div>
+          <div class="company-dep-item">Global Logistics</div>
+          <div class="company-dep-item">Real-Time Diagnostics</div>
+          <div class="company-dep-item">Remote Troubleshooting</div>
         </div>
       </div>
     </div>
 
     <!-- Challenges & Opportunities -->
     <div class="company-section">
-      <h3>Challenges &amp; Opportunities</h3>
-      <div class="company-challenges-grid">
-        <div class="company-challenges-col">
-          <h4>&#9888;&#65039; Known Challenges</h4>
-          <ul>
-            <li>
-              <span class="ch-icon">&#9888;&#65039;</span>
-              Ensuring safety in human-robot interaction
-            </li>
-            <li>
-              <span class="ch-icon">&#128274;</span>
-              Managing privacy risks from in-home sensors
-            </li>
-            <li>
-              <span class="ch-icon">&#127981;</span>
-              Scaling manufacturing capacity
-            </li>
-          </ul>
-        </div>
-        <div class="company-challenges-col">
-          <h4>&#128640; Opportunities</h4>
-          <ul>
-            <li>
-              <span class="ch-icon">&#128640;</span>
-              Expand into elder-care market
-            </li>
-            <li>
-              <span class="ch-icon">&#128640;</span>
-              Workplace automation adoption
-            </li>
-          </ul>
+      <div class="company-section-header">
+        <h3>Challenges &amp; Opportunities</h3>
+      </div>
+      <div class="company-section-body">
+        <div class="company-challenges-grid">
+          <div class="company-challenges-col">
+            <h4>Known Challenges</h4>
+            <ul>
+              <li>Ensuring safety in human-robot interaction</li>
+              <li>Managing privacy risks from in-home sensors</li>
+              <li>Scaling manufacturing capacity</li>
+            </ul>
+          </div>
+          <div class="company-challenges-col">
+            <h4>Opportunities</h4>
+            <ul>
+              <li>Expand into elder-care market</li>
+              <li>Workplace automation adoption</li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>
@@ -4079,35 +4120,6 @@
       renderRaciTable();
     }
 
-    // ===== IMPORT RISKS AS TASKS =====
-    function importRisksAsTasks() {
-      if (risks.length === 0) {
-        alert('No risks to import. Add risks from the Heatmap view first.');
-        return;
-      }
-
-      const existingNames = new Set(raciMatrix.tasks.map(t => t.name.toLowerCase()));
-      let imported = 0;
-
-      risks.forEach(risk => {
-        if (!existingNames.has(risk.title.toLowerCase())) {
-          raciMatrix.tasks.push({
-            id: 'task_' + Date.now() + '_' + Math.random().toString(36).substring(2, 8),
-            name: risk.title
-          });
-          existingNames.add(risk.title.toLowerCase());
-          imported++;
-        }
-      });
-
-      if (imported > 0) {
-        saveRaciData();
-        renderRaciTable();
-        alert(`Imported ${imported} risk(s) as tasks.`);
-      } else {
-        alert('All risks are already in the RACI matrix.');
-      }
-    }
 
     // ===== EVENT LISTENERS =====
     function init() {
@@ -4300,8 +4312,6 @@
         if (e.key === 'Enter') { e.preventDefault(); handleSaveRole(); }
       });
 
-      // Import risks button
-      document.getElementById('import-risks-btn').addEventListener('click', importRisksAsTasks);
     }
 
     // ===== SETTINGS MODAL =====
