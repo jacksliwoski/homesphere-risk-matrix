@@ -2,6 +2,8 @@
 
 A single-page web application for enterprise risk management, featuring an interactive 5x5 risk heat map, RACI responsibility matrix, and company profile — built for HomeSphere Robotics.
 
+**Live Demo:** [https://homesphere-92352.web.app/](https://homesphere-92352.web.app/)
+
 ## Quick Start (No Firebase)
 
 The app works fully offline with localStorage. Just open `index.html` in a browser.
